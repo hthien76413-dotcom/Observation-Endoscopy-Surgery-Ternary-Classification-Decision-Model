@@ -26,23 +26,33 @@ admit_year
 2026        29   8  55
 
 变量缺失率(%):
-lab_crp             51.6
-loc_smallbowel      13.8
-xray_radiopaque     13.8
-loc_stomach         13.8
-loc_duodenum        13.8
-loc_colorectal      13.8
-loc_esophagus       13.8
-lab_hb               7.6
-lab_neut_pct         7.6
-lab_wbc              7.6
-lab_plt              7.6
-lab_alb              5.0
+lab_crp             68.7
+loc_smallbowel      20.8
+xray_radiopaque     20.8
+loc_stomach         20.8
+loc_duodenum        20.8
+loc_colorectal      20.8
+loc_esophagus       20.8
+lab_hb              14.3
+lab_neut_pct        14.3
+lab_wbc             14.3
+lab_plt             14.3
+lab_alb             11.4
 ingest_hours         2.1
 log_ingest_hours     2.1
 temp_c               1.8
 weight_kg            1.5
 los_days             0.5
+
+影像时相(首次 X 线相对手术开始):
+  无手术: 497 <- 可用于建模
+  术前: 484 <- 可用于建模
+  无影像: 171
+  决策后: 49
+  同日不明: 37
+  可用影像特征的病例: 981
+
+决策前化验可用: 1116
 
 结局:
   out_perforation: 78 (6.3%)

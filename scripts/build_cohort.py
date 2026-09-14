@@ -10,6 +10,11 @@
   只纳入"治疗决策时点之前"可获得的变量，避免信息泄漏。
   术中诊断、出院诊断、住院天数、手术记录内容等均为决策后信息，仅用于
   结局定义与标签校验，不得进入预测因子。
+
+  时相过滤: 影像与化验不仅要"类型正确"，还要"时点正确"。拍摄或报告晚于
+  手术开始的结果属于决策后信息，其特征一律置为缺失。判定时刻取自手麻系统的
+  「手术开始时间」(精确到分钟); `住院病历手术记录` 的时间字段 100% 为 00:00、
+  只有日期，不能用于时序比较，仅在无手麻记录时降级为同日判定。
 """
 import os
 import re
@@ -135,8 +140,13 @@ def resolve_censored(quant, qual):
     return value.fillna(lod / 2)
 
 
-def earliest_labs(path):
-    """每次住院取报告时间最早的一次检验，代表决策时点的化验状态。"""
+def earliest_labs(path, exact, date_only):
+    """每次住院取报告时间最早的一次检验，并按时相过滤。
+
+    报告时间晚于手术开始的化验属于决策后信息，其数值置为缺失。
+    该判定偏保守——标本多在报告前数小时采集(中位提前 3.8 h)，
+    但只有报告时间可用，宁可少用也不引入泄漏。
+    """
     out = []
     for sheet, mapping in LAB_ITEMS.items():
         df = pd.read_excel(path, sheet_name=sheet)
@@ -146,19 +156,90 @@ def earliest_labs(path):
                 df["超敏C反应蛋白定量-定量结果"], df["超敏C反应蛋白定量-定性结果"]
             )
         df = df.sort_values("报告时间").groupby("就诊编号", as_index=False).first()
-        keep = df[["就诊编号"] + list(mapping.values())].rename(columns={v: k for k, v in mapping.items()})
-        out.append(keep.rename(columns={"就诊编号": "科研就诊编号"}))
+        keep = df[["就诊编号", "报告时间"] + list(mapping.values())].rename(
+            columns={v: k for k, v in mapping.items()})
+        keep = keep.rename(columns={"就诊编号": "科研就诊编号", "报告时间": f"_t_{sheet}"})
+        out.append(keep)
+
     labs = out[0]
     for extra in out[1:]:
         labs = labs.merge(extra, on="科研就诊编号", how="outer")
-    for col in labs.columns:
-        if col != "科研就诊编号":
-            labs[col] = pd.to_numeric(labs[col], errors="coerce")
-    return labs
+
+    value_cols = [c for m in LAB_ITEMS.values() for c in m]
+    for col in value_cols:
+        labs[col] = pd.to_numeric(labs.get(col), errors="coerce")
+
+    # 每张表各自判定时相，逐表置空，最后汇总一个总体标记
+    time_cols = [c for c in labs.columns if c.startswith("_t_")]
+    predecision_any = pd.Series(False, index=labs.index)
+    for sheet, mapping in LAB_ITEMS.items():
+        tcol = f"_t_{sheet}"
+        phase = decision_phase(labs["科研就诊编号"], labs[tcol], exact, date_only)
+        keep_mask = phase.isin(PREDECISION_PHASES)
+        labs = blank_out(labs, list(mapping), keep_mask)
+        predecision_any |= keep_mask & labs[tcol].notna()
+    labs["lab_predecision"] = predecision_any.astype(int)
+    return labs.drop(columns=time_cols)
 
 
 # --------------------------------------------------------------------------
-# 4. 结局(仅用于标签校验与描述，不作预测因子)
+# 4. 决策时点: 判定某项检查是否在治疗决策之前完成
+# --------------------------------------------------------------------------
+# 可用于建模的时相。"无手术"者本次住院无操作，入院时的检查均在决策之前。
+PREDECISION_PHASES = {"术前", "无手术"}
+
+
+def operation_times(path):
+    """返回 (精确手术开始时刻, 仅日期的手术日期)。
+
+    手麻系统的「手术开始时间」精确到分钟，是唯一可用于时序比较的字段。
+    `住院病历手术记录.手术日期及时间` 全部为 00:00，只有日期。
+    """
+    sa = pd.read_excel(path, sheet_name="手麻系统信息")
+    exact = (sa.assign(t=pd.to_datetime(sa["手术开始时间"], errors="coerce"))
+               .dropna(subset=["t"]).groupby("科研就诊编号")["t"].min())
+
+    op = pd.read_excel(path, sheet_name="住院病历手术记录")
+    dates = pd.to_datetime(op["手术日期及时间"], errors="coerce").dt.normalize()
+    date_only = (op.assign(d=dates).dropna(subset=["d"])
+                   .groupby("科研就诊编号")["d"].min())
+    return exact, date_only
+
+
+def decision_phase(visits, times, exact, date_only):
+    """逐条判定检查时刻相对手术开始的时相。
+
+    返回值: 术前 / 决策后 / 同日不明 / 无手术 / 时间缺失
+    「同日不明」= 手术仅有日期、检查与之同日，无法判断先后，保守起见不作预测因子。
+    """
+    e = visits.map(exact)
+    d = visits.map(date_only)
+    t = pd.to_datetime(times, errors="coerce")
+
+    phase = pd.Series("无手术", index=visits.index, dtype=object)
+    phase[t.isna()] = "时间缺失"
+
+    has_exact = e.notna() & t.notna()
+    phase[has_exact & (t < e)] = "术前"
+    phase[has_exact & (t >= e)] = "决策后"
+
+    only_date = e.isna() & d.notna() & t.notna()
+    day = t.dt.normalize()
+    phase[only_date & (day < d)] = "术前"
+    phase[only_date & (day > d)] = "决策后"
+    phase[only_date & (day == d)] = "同日不明"
+    return phase
+
+
+def blank_out(df, columns, keep_mask):
+    """把不满足 keep_mask 的行在指定列上置为缺失。"""
+    for col in columns:
+        df.loc[~keep_mask, col] = np.nan
+    return df
+
+
+# --------------------------------------------------------------------------
+# 5. 结局(仅用于标签校验与描述，不作预测因子)
 # --------------------------------------------------------------------------
 OUTCOME_PAT = {
     "out_perforation": r"穿孔",
@@ -180,6 +261,7 @@ def build():
 
     proc = load_procedures(XLSX)
     base["label"] = base["科研就诊编号"].map(lambda v: assign_label(v, proc))
+    exact, date_only = operation_times(XLSX)
 
     df = base.merge(adm, on=["科研患者编号", "科研就诊编号"], how="left")
 
@@ -205,21 +287,32 @@ def build():
     for name, pat in SYMPTOMS.items():
         df[name] = flag(exam, pat)
 
-    # ---- 影像定位: 取首次 X 线报告 ----
-    xray["报告时间"] = pd.to_datetime(xray["报告时间"], errors="coerce")
+    # ---- 影像定位: 取首次 X 线，按检查时间(而非报告时间)排序 ----
+    # 决策依据是拍片时刻；报告可能滞后数小时，用报告时间会错判时序。
+    xray["检查时间"] = pd.to_datetime(xray["检查时间"], errors="coerce")
     xray["text"] = xray["检查所见"].astype(str) + " " + xray["检查结论"].astype(str)
-    first_xray = xray.sort_values("报告时间").groupby("科研就诊编号", as_index=False).first()
+    first_xray = xray.sort_values("检查时间").groupby("科研就诊编号", as_index=False).first()
     for name, pat in LOCATIONS.items():
         first_xray[name] = flag(first_xray["text"], pat)
-    first_xray["xray_radiopaque"] = flag(first_xray["text"], r"不透X光异物|不透X线异物|金属异物|异物影")
+    first_xray["xray_radiopaque"] = flag(
+        first_xray["text"], r"不透X光异物|不透X线异物|金属异物|异物影")
+    first_xray["xray_phase"] = decision_phase(
+        first_xray["科研就诊编号"], first_xray["检查时间"], exact, date_only)
+
+    # 首次片晚于手术开始者，本次住院没有决策前影像，其影像特征一律置空
+    keep_mask = first_xray["xray_phase"].isin(PREDECISION_PHASES)
+    first_xray = blank_out(first_xray, ["xray_radiopaque"] + list(LOCATIONS), keep_mask)
+
     df = df.merge(
-        first_xray[["科研就诊编号", "xray_radiopaque"] + list(LOCATIONS)],
+        first_xray[["科研就诊编号", "xray_phase", "xray_radiopaque"] + list(LOCATIONS)],
         on="科研就诊编号", how="left",
     )
+    df["xray_phase"] = df["xray_phase"].fillna("无影像")
     df["has_xray"] = df["xray_radiopaque"].notna().astype(int)
 
     # ---- 化验 ----
-    df = df.merge(earliest_labs(XLSX), on="科研就诊编号", how="left")
+    df = df.merge(earliest_labs(XLSX, exact, date_only), on="科研就诊编号", how="left")
+    df["lab_predecision"] = df["lab_predecision"].fillna(0).astype(int)
 
     # ---- 结局 ----
     dx["诊断疾病名称"] = dx["诊断疾病名称"].astype(str)
@@ -237,8 +330,9 @@ def build():
     keep = (
         ["科研患者编号", "科研就诊编号", "admit_year", "label", "label_name"]
         + ["age_years", "male", "weight_kg", "temp_c", "ingest_hours", "log_ingest_hours"]
-        + list(FB_TYPES) + list(SYMPTOMS) + ["has_xray", "xray_radiopaque"] + list(LOCATIONS)
-        + ["lab_wbc", "lab_neut_pct", "lab_hb", "lab_plt", "lab_crp", "lab_alb"]
+        + list(FB_TYPES) + list(SYMPTOMS)
+        + ["xray_phase", "has_xray", "xray_radiopaque"] + list(LOCATIONS)
+        + ["lab_predecision", "lab_wbc", "lab_neut_pct", "lab_hb", "lab_plt", "lab_crp", "lab_alb"]
         + list(OUTCOME_PAT) + ["los_days"]
     )
     cohort = df[keep]
@@ -263,6 +357,14 @@ def build():
     lines.append("变量缺失率(%):")
     miss = (cohort.isna().mean() * 100).round(1)
     lines.append(miss[miss > 0].sort_values(ascending=False).to_string())
+    lines.append("")
+    lines.append("影像时相(首次 X 线相对手术开始):")
+    for k, v in cohort["xray_phase"].value_counts().items():
+        usable = " <- 可用于建模" if k in PREDECISION_PHASES else ""
+        lines.append(f"  {k}: {v}{usable}")
+    lines.append(f"  可用影像特征的病例: {int(cohort['has_xray'].sum())}")
+    lines.append("")
+    lines.append(f"决策前化验可用: {int(cohort['lab_predecision'].sum())}")
     lines.append("")
     lines.append("结局:")
     for name in OUTCOME_PAT:
