@@ -16,10 +16,10 @@
 
 | 模型 | 观察 AUC | 内镜 AUC | 手术 AUC | 宏平均 AUC |
 |---|---|---|---|---|
-| 多分类 Logistic | 0.721 | 0.732 | 0.903 | 0.785 |
-| 随机森林 | 0.725 | 0.739 | 0.919 | 0.794 |
+| 多分类 Logistic | 0.719 | 0.728 | 0.908 | 0.785 |
+| 随机森林 | 0.726 | 0.739 | 0.923 | 0.796 |
 
-时间外部验证（2016–2023 → 2024–2026）：手术 AUC **0.944**，宏平均 AUC 0.776。
+时间外部验证（2016–2023 → 2024–2026）：手术 AUC **0.945**，宏平均 AUC 0.773。
 
 ## 目录
 
@@ -64,3 +64,15 @@ python3 scripts/ingest_annotation.py annotation/X线重标注表单.xlsx [第二
 
 判读标准见 `docs/X线重标注手册.md`。1073 例中 985 例可直接用于建模
 （50 例首次片晚于手术开始，38 例与手术同日、时序不明）。
+
+## Table 1
+
+```bash
+python3 scripts/build_table1.py
+```
+
+生成 `outputs/Table1.docx`（投稿用三线表，含 Table 1 基线特征与 Table 2 结局比较）、
+`outputs/table1.{csv,md}` 与 `outputs/table2_outcomes.{csv,md}`。
+
+连续变量报告中位数（IQR）与 Kruskal-Wallis 检验（效应量 epsilon²），分类变量报告
+n(%) 与卡方检验（效应量 Cramér's V）；任一期望频数 <5 时改用蒙特卡洛置换检验。

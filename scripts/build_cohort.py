@@ -89,17 +89,37 @@ FB_TYPES = {
     "fb_multiple": r"多发|两枚|三枚|数枚|多枚|多个|数个|\d+\s*颗",
 }
 
-# 症状/体征。用否定前瞻排除"无腹痛"这类阴性描述。
+# 症状/体征。
+#
+# 直接用正则找关键词会严重高估：病历模板总会把体征写全，
+# 「全腹压痛阴性，反跳痛阴性」里同样含「压痛」「反跳痛」。
+# 早期版本据此得出压痛阳性率 99.5%(1232/1238)，实际仅约 7.4%。
+#
+# 改为分句级否定作用域：按标点切分，若否定词出现在症状词之前，判为阴性。
+# 这同时覆盖两种写法——「无恶心、无呕吐」(逐项带否定) 与
+# 「无恶心呕吐」(一个否定词管两项)。
+# 冒号必须切分: 「压痛：无」若不切，否定词落在症状词之后会被误判为阳性。
+CLAUSE_SPLIT = r"[。；;，,、：:\n]"
+NEGATORS = r"无|未见|未闻|未及|未触及|未出现|不伴|否认|阴性|\(-\)|（-）"
+
 SYMPTOMS = {
-    "sym_abdpain": r"(?<!无)(?<!否认)腹痛",
-    "sym_vomit": r"(?<!无)(?<!否认)呕吐",
+    "sym_abdpain": r"腹痛",
+    "sym_vomit": r"呕吐",
     "sym_hematemesis": r"呕血|黑便|便血|血便",
-    "sym_fever": r"(?<!无)(?<!否认)发热",
+    "sym_fever": r"发热|发烧",
     "sym_dysphagia": r"流涎|吞咽困难|拒食|不能进食|吞咽疼痛",
-    "sym_distension": r"(?<!无)(?<!否认)腹胀",
+    "sym_distension": r"腹胀",
+}
+
+# 体征在病历中以「阳性/阴性」记录，须按该记法判读，不能只找关键词。
+#
+# 只取 `专科情况（体检）`——那是腹部专科查体。`体格检查` 是全身查体，
+# 含乳突、副鼻窦、甲状腺的压痛描述，混进来会把耳鼻喉的体征当成腹部体征。
+SIGNS = {
     "sign_tenderness": r"压痛",
     "sign_peritoneal": r"反跳痛|肌紧张|板状腹|腹膜刺激征",
 }
+POSITIVE_MARK = r"\s*[（(]?\s*(?:阳性|\+|＋)"
 
 # 影像学定位。食管/胃属内镜可及，幽门以远多可观察。
 LOCATIONS = {
@@ -113,6 +133,37 @@ LOCATIONS = {
 
 def flag(series, pattern):
     return series.str.contains(pattern, regex=True, na=False).astype(int)
+
+
+def assert_positive(series, pattern):
+    """分句级否定作用域：某一分句内，否定词出现在症状词之前则该句不算阳性。
+
+    只要有任意一个分句作出阳性陈述即判为 1。
+    """
+    neg = re.compile(NEGATORS)
+    sym = re.compile(pattern)
+    split = re.compile(CLAUSE_SPLIT)
+
+    def judge(text):
+        for clause in split.split(str(text)):
+            m = sym.search(clause)
+            if not m:
+                continue
+            n = neg.search(clause)
+            if n is None or n.start() > m.start():
+                return 1
+        return 0
+
+    return series.fillna("").map(judge).astype(int)
+
+
+def sign_positive(series, pattern):
+    """体征按「阳性/阴性」记法判读；无该记法时回退到分句级否定。"""
+    explicit = series.str.contains(f"(?:{pattern}){POSITIVE_MARK}", regex=True, na=False)
+    has_mark = series.str.contains(
+        f"(?:{pattern})\\s*[（(]?\\s*(?:阳性|阴性|\\+|＋|-|－)", regex=True, na=False)
+    fallback = assert_positive(series, pattern).astype(bool)
+    return np.where(has_mark, explicit, fallback).astype(int)
 
 
 # --------------------------------------------------------------------------
@@ -288,12 +339,14 @@ def build():
         df["主诉"].fillna("") + " " + df["现病史"].fillna("") + " "
         + df["门（急）诊诊断名称"].fillna("") + " " + df["初步诊断"].fillna("")
     )
-    exam = history + " " + df["专科情况（体检）"].fillna("") + " " + df["体格检查"].fillna("")
+    abdominal_exam = df["专科情况（体检）"].fillna("")
 
     for name, pat in FB_TYPES.items():
         df[name] = flag(history, pat)
     for name, pat in SYMPTOMS.items():
-        df[name] = flag(exam, pat)
+        df[name] = assert_positive(history, pat)
+    for name, pat in SIGNS.items():
+        df[name] = sign_positive(abdominal_exam, pat)
 
     # ---- 影像定位: 取首次 X 线，按检查时间(而非报告时间)排序 ----
     # 决策依据是拍片时刻；报告可能滞后数小时，用报告时间会错判时序。
@@ -338,7 +391,7 @@ def build():
     keep = (
         ["科研患者编号", "科研就诊编号", "admit_year", "first_admission", "label", "label_name"]
         + ["age_years", "male", "weight_kg", "temp_c", "ingest_hours", "log_ingest_hours"]
-        + list(FB_TYPES) + list(SYMPTOMS)
+        + list(FB_TYPES) + list(SYMPTOMS) + list(SIGNS)
         + ["xray_phase", "has_xray", "xray_radiopaque"] + list(LOCATIONS)
         + ["lab_predecision", "lab_wbc", "lab_neut_pct", "lab_hb", "lab_plt", "lab_crp", "lab_alb"]
         + list(OUTCOME_PAT) + ["los_days"]
