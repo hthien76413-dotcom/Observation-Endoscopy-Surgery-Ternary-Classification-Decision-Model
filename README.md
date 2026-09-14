@@ -98,3 +98,13 @@ python3 scripts/build_manuscript.py
 
 **初稿不可直接投稿**：Results 与结论段为占位，参考文献表刻意留空。
 改稿编辑 `draft_content.py` 后重跑，三份产物同步更新。
+
+## 观察组安全性核查
+
+```bash
+python3 scripts/readmission_check.py
+```
+
+30 日再入院核查。观察组住院期间无穿孔、无新发并发症，但 **2/577（0.35%）
+出院后 30 日内返院接受手术**——「0 例不良结局」的说法不成立。
+射程限于本院异物相关住院，详见 `outputs/readmission_report.txt`。

@@ -36,8 +36,10 @@ ABSTRACT = [
     ("Results",
      "Management was observation in 583 (47.1%), endoscopy in 520 (42.0%), and surgery "
      "in 135 (10.9%). 【TODO: 正式分析的判别效能——one-vs-rest AUC、宏平均、"
-     "时间验证结果、校准斜率与截距】 Perforation occurred in 78 admissions (6.3%); "
-     "none occurred in the observation group. 【TODO: 净获益与列线图的关键结果】"),
+     "时间验证结果、校准斜率与截距】 Perforation occurred in 78 admissions (6.3%), "
+     "none during an admission managed by observation; two observed children (0.35%) "
+     "were readmitted within 30 days and underwent surgery. "
+     "【TODO: 净获益与列线图的关键结果】"),
     ("Conclusions",
      "【TODO: 依正式结果改写】 The need for surgery was predictable with high "
      "discrimination, whereas the boundary between observation and endoscopy was "
@@ -209,9 +211,27 @@ BODY = [
 
  "Perforation was recorded in 78 admissions (6.3%), obstruction in 40 (3.2%) and "
  "peritonitis in 33 (2.7%). Of the 78 perforations, 76 were managed surgically and two "
- "endoscopically; none occurred in the observation group. 【TODO: 补充随访核查——"
- "观察组有无 30 日内因同一异物再入院或延迟干预，这是标签效度的关键证据，"
- "须查再入院记录后写明】"]),
+ "endoscopically; none occurred during an admission managed by observation.",
+
+ "Because an outcome defined by delivered management could conceal deferred rather than "
+ "avoided intervention, we examined readmissions. Among 577 observation admissions with "
+ "a recorded discharge date, two children (0.35%) were readmitted within 30 days and "
+ "underwent surgery, at 2 and 5 days after discharge; readmission within 30 days "
+ "occurred in 5 of 520 admissions (0.96%) after endoscopy and 2 of 135 (1.48%) after "
+ "surgery. 【TODO: 调阅这两例病历，说明再入院时的异物位置与手术所见——"
+ "审稿人会问这两例当初是否本就该干预】",
+
+ "Obstruction, peritonitis or sepsis appeared among the discharge diagnoses of ten "
+ "observation admissions, but in every instance the diagnosis was coded as present on "
+ "admission rather than arising during the admission, and several were unrelated to the "
+ "ingested object (appendicitis with abscess, faecal impaction, colitis). No new-onset "
+ "complication was recorded in the observation group.",
+
+ "This cohort contains only admissions for foreign body ingestion at this institution, "
+ "so the readmission analysis cannot detect children who presented elsewhere, were "
+ "admitted under a different diagnosis, or were managed in outpatient follow-up. The "
+ "figures above should be read as institution-level foreign-body readmission, not as "
+ "an absence of delayed intervention."]),
 
 ("3.2. Model performance", [
  "【TODO: 全部效能结果。当前预试验值（5 折交叉验证、中位数填补、未做重标注）为："
@@ -271,18 +291,23 @@ BODY = [
  "period. Predictors were restricted to the pre-decision window by timestamp comparison "
  "rather than by assumption, and the effect of that restriction is quantified. "
  "Validation was temporal rather than random, testing the model against a period the "
- "development data did not contain. The coherence between outcome class and "
- "complications — no perforation among 583 observed children — supports the clinical "
- "validity of the outcome definition.",
+ "development data did not contain. The coherence between outcome class and subsequent "
+ "course — no perforation and no new-onset complication among observed children, with "
+ "surgery after readmission in 0.35% — supports the clinical validity of the outcome "
+ "definition, while quantifying rather than assuming the safety of observation.",
 
  "This study has important limitations. First, and most fundamentally, the outcome is "
  "the management that was delivered, not the management that was optimal. The model "
  "therefore predicts current best practice at this institution and is best understood "
  "as a tool for triage and resource anticipation rather than as a causal statement about "
- "which treatment a child ought to receive. The absence of perforation in the observation "
- "group indicates that observation was, in these children, safe; it does not establish "
- "that every endoscopy performed was necessary. Prospective evaluation would be required "
- "to address that question. Second, the study is single-centre, and although temporal "
+ "which treatment a child ought to receive. Observation was safe in the great "
+ "majority — no perforation, no new-onset complication, and surgery after readmission "
+ "in 0.35% — but this does not establish that every endoscopy performed was "
+ "necessary, and the two children who returned for surgery show that the observation "
+ "label is not uniformly correct. Prospective evaluation would be required to address "
+ "that question. Readmission ascertainment is moreover limited to this institution "
+ "and to foreign-body admissions, so delayed intervention elsewhere would not be "
+ "detected. Second, the study is single-centre, and although temporal "
  "validation demonstrates stability across periods, geographical external validation is "
  "absent. Third, object type and clinical features were extracted from free text; "
  "【TODO: 引用核验所得准确率与 kappa】 residual misclassification is possible, "
