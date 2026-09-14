@@ -25,10 +25,18 @@
 
 ### 该文状态：已写好，拟投 JPGN，尚未投出（截至 2026-09）
 
-**期刊分流（已给出建议）**：磁性异物 → **JPGN**（按用户原计划，尽快投出）；
-本文 → **J Pediatr Surg** 首选，其后 Surgical Endoscopy → World J Emerg Surg →
-Pediatr Surg Int → Front Pediatr。**本文不去 JPGN**，以避开同编辑同队列撞车；
-仅在磁性异物文已见刊且前几家均未中时，才把 JPGN 作为后备。
+**期刊已定（用户决定，2026-09）**：
+
+- 磁性异物论文 → **JPGN**（已写好，待投）
+- 本文（三分类模型）→ **J Pediatr Surg**
+
+**本文不去 JPGN**，以避开同编辑同队列撞车。J Pediatr Surg 若未中，
+后续顺位 Surgical Endoscopy → World J Emerg Surg → Pediatr Surg Int →
+Front Pediatr；仅在磁性异物文已见刊且前几家均未中时，才把 JPGN 作为后备。
+
+投稿前须自行核实 J Pediatr Surg 的现行 author guidelines（字数上限、
+结构式摘要格式、图表数量、预印本政策、是否要求 TRIPOD+AI 清单随稿）——
+期刊要求变动频繁，不要凭印象。
 
 时序要点（详见 `docs/SCI论文写作方案.md` §四、§五）：
 
