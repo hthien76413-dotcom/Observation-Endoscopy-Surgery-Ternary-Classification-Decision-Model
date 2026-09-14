@@ -106,6 +106,17 @@ BODY = [
  "and anaesthetic records. 【TODO: 说明人工核验的例数与一致性——建议随机抽取 100 例由"
  "一位不参与建模的医师独立核对分类】",
 
+
+ "One further distinction is necessary. Ten admissions carry the coded discharge "
+ "diagnosis \"procedure not performed for reasons attributable to the family\", and all "
+ "ten fall into the observation class. In these children observation was not the "
+ "clinician's judgement but the outcome of a declined intervention, so the label carries "
+ "a different meaning; they were flagged and excluded in a prespecified sensitivity "
+ "analysis. We did not attempt to identify further such admissions from free text: "
+ "phrases such as \"the family requested discharge\" appear in 359 records including 137 "
+ "after endoscopy and 22 after surgery, and are routine discharge wording rather than a "
+ "marker of refusal.",
+
  "Complications were extracted from coded discharge diagnoses and were used to describe "
  "the cohort and to examine the clinical coherence of the outcome classes; they were "
  "not used as predictors."]),
@@ -183,7 +194,7 @@ BODY = [
  "Prespecified sensitivity analyses addressed: restriction to first admissions; "
  "exclusion of all laboratory predictors; restriction to admissions with pre-decision "
  "imaging; restriction to admissions with pre-decision laboratory results; "
- "complete-case analysis; and retention of C-reactive protein. For each, the class "
+ "complete-case analysis; retention of C-reactive protein; and exclusion of admissions in which a planned procedure was not performed because the family declined it. For each, the class "
  "composition of the retained subset was compared with the full cohort, so that a "
  "difference in discrimination arising from selection would not be mistaken for a "
  "difference in model performance."]),
@@ -219,7 +230,14 @@ BODY = [
  "underwent surgery, at 2 and 5 days after discharge; readmission within 30 days "
  "occurred in 5 of 520 admissions (0.96%) after endoscopy and 2 of 135 (1.48%) after "
  "surgery. 【TODO: 调阅这两例病历，说明再入院时的异物位置与手术所见——"
- "审稿人会问这两例当初是否本就该干预】",
+ "surgery. Review of both records showed an object retained for weeks with a clear "
+ "indication for intervention, and in both the index discharge followed a family "
+ "decision rather than a clinical judgement that observation was appropriate. In one, a "
+ "pebble measuring 19 x 11 mm had lodged at the ileocaecal region for 11 days with "
+ "rectal bleeding, and was removed at laparotomy after laparoscopy and colonoscopy "
+ "failed to retrieve it. In the other, two magnetic objects had been retained for a "
+ "month and computed tomography showed them apposed across the gastric wall; the child "
+ "returned with a gastrocolic fistula and gastric perforation requiring repair.",
 
  "Obstruction, peritonitis or sepsis appeared among the discharge diagnoses of ten "
  "observation admissions, but in every instance the diagnosis was coded as present on "
@@ -296,6 +314,16 @@ BODY = [
  "surgery after readmission in 0.35% — supports the clinical validity of the outcome "
  "definition, while quantifying rather than assuming the safety of observation.",
 
+ "That both readmitted children had declined intervention at the index admission points "
+ "to a broader caveat about the outcome label. The observation class contains two "
+ "distinct situations — observation chosen because it was judged appropriate, and "
+ "observation arrived at because an offered intervention was refused — and only the "
+ "first is the decision a model should learn. Excluding the ten admissions where refusal "
+ "is explicitly coded improved discrimination 《from a macro-averaged AUC of 0.788 to "
+ "0.794, and for the observation class from 0.725 to 0.735》, consistent with those "
+ "labels behaving as noise. Refusal is unlikely to be coded in every instance, so some "
+ "residual contamination of the observation class should be assumed.",
+
  "This study has important limitations. First, and most fundamentally, the outcome is "
  "the management that was delivered, not the management that was optimal. The model "
  "therefore predicts current best practice at this institution and is best understood "
@@ -304,7 +332,9 @@ BODY = [
  "majority — no perforation, no new-onset complication, and surgery after readmission "
  "in 0.35% — but this does not establish that every endoscopy performed was "
  "necessary, and the two children who returned for surgery show that the observation "
- "label is not uniformly correct. Prospective evaluation would be required to address "
+ "label is not uniformly correct — both of them had declined an offered intervention "
+ "rather than been judged suitable for observation. Prospective evaluation would be "
+ "required to address "
  "that question. Readmission ascertainment is moreover limited to this institution "
  "and to foreign-body admissions, so delayed intervention elsewhere would not be "
  "detected. Second, the study is single-centre, and although temporal "

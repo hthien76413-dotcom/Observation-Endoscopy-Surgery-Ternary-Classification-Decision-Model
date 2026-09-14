@@ -76,6 +76,8 @@ SENSITIVITY = [
      "同上，针对化验"),
     ("S5 完整病例分析", "complete", FULL,
      "不做任何填补（方法学计划要求）"),
+    ("S7 剔除家属拒绝者", lambda d: d["family_declined"] == 0, FULL,
+     "10 例因家属拒绝未操作被记为观察，标签含义不同"),
     ("S6 保留 CRP", None,
      BASE_FEATURES + FB_FEATURES + SYM_FEATURES + LOC_FEATURES
      + LAB_FEATURES + ["lab_crp"],

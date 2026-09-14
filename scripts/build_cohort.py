@@ -309,6 +309,12 @@ def blank_out(df, columns, keep_mask):
 # --------------------------------------------------------------------------
 # 5. 结局(仅用于标签校验与描述，不作预测因子)
 # --------------------------------------------------------------------------
+# 编码诊断「因病人家属原因未进行操作」= 计划中的操作因家属拒绝而未执行。
+# 这类病例会被记为「观察」，但并非医师判断可以观察——标签含义不同，须单列。
+# 文本里的「家长要求出院」不可用作同类标记：359 例中含 137 例内镜、22 例手术，
+# 多为治疗完成后的常规出院用语，不特异。
+FAMILY_DECLINED_PAT = r"家属原因未进行操作|家属原因未进行"
+
 OUTCOME_PAT = {
     "out_perforation": r"穿孔",
     "out_obstruction": r"梗阻",
@@ -392,6 +398,9 @@ def build():
 
     # ---- 结局 ----
     dx["诊断疾病名称"] = dx["诊断疾病名称"].astype(str)
+    declined = set(dx.loc[dx["诊断疾病名称"].str.contains(FAMILY_DECLINED_PAT),
+                          "科研就诊编号"])
+    df["family_declined"] = df["科研就诊编号"].isin(declined).astype(int)
     for name, pat in OUTCOME_PAT.items():
         ids = set(dx.loc[dx["诊断疾病名称"].str.contains(pat), "科研就诊编号"])
         df[name] = df["科研就诊编号"].isin(ids).astype(int)
@@ -409,7 +418,7 @@ def build():
         + list(FB_TYPES) + list(SYMPTOMS) + list(SIGNS)
         + ["xray_phase", "has_xray", "xray_radiopaque"] + list(LOCATIONS)
         + ["lab_predecision", "lab_wbc", "lab_neut_pct", "lab_hb", "lab_plt", "lab_crp", "lab_alb"]
-        + list(OUTCOME_PAT) + ["los_days"]
+        + list(OUTCOME_PAT) + ["family_declined", "los_days"]
     )
     cohort = df[keep]
     cohort.to_csv(f"{OUTDIR}/cohort.csv", index=False, encoding="utf-8-sig")
@@ -444,6 +453,11 @@ def build():
     lines.append(f"  可用影像特征的病例: {int(cohort['has_xray'].sum())}")
     lines.append("")
     lines.append(f"决策前化验可用: {int(cohort['lab_predecision'].sum())}")
+    lines.append("")
+    n_dec = int(cohort["family_declined"].sum())
+    lines.append(f"因家属拒绝而未操作: {n_dec} 例"
+                 f"（均记为观察组：{int(cohort.loc[cohort['family_declined'] == 1, 'label'].eq(0).sum())}）")
+    lines.append("  这些病例并非医师判断可观察，标签含义不同，须做剔除后的敏感性分析。")
     lines.append("")
     lines.append("结局:")
     for name in OUTCOME_PAT:
