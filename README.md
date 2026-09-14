@@ -50,3 +50,17 @@ python3 scripts/pilot_model.py
 ## 伦理
 
 回顾性研究，数据已去标识化。发表前需确认补充材料不含原始自由文本。
+
+## X 线重标注
+
+当前最大的效能缺口是影像定位。表单与手册已就绪：
+
+```bash
+python3 scripts/build_worklist.py          # 生成工作清单
+python3 scripts/build_annotation_form.py   # 生成 annotation/X线重标注表单.xlsx
+# 阅片完成后
+python3 scripts/ingest_annotation.py annotation/X线重标注表单.xlsx [第二位阅片者.xlsx]
+```
+
+判读标准见 `docs/X线重标注手册.md`。1073 例中 985 例可直接用于建模
+（50 例首次片晚于手术开始，38 例与手术同日、时序不明）。
