@@ -30,6 +30,11 @@ ENDOSCOPIC_REACH = {"esophagus", "stomach", "duodenum"}
 
 COUNT_BAND = {"1": 1.0, "2": 2.0, "3-5": 4.0, "≥6": 7.0, "不能确定": np.nan}
 
+# 指南常用阈值(mm)。阈值随年龄而异且各指南略有出入，正式分析须按所引指南确认，
+# 并以原始毫米值做阈值敏感性分析——这正是分开记录长径短径的用意。
+PYLORUS_MM = 25    # 短径超过此值难以通过幽门
+DUODENUM_MM = 60   # 长径超过此值难以通过十二指肠 C 形襻
+
 KAPPA_FIELDS = ["异物可见", "部位", "数目", "成串成团", "形态", "双环征", "影像判断类型"]
 
 
@@ -77,15 +82,29 @@ def derive(df):
     exact = pd.to_numeric(df.get("数目_精确"), errors="coerce")
     out["xray_count"] = exact.fillna(df["数目"].map(COUNT_BAND))
     out["xray_multiple"] = (out["xray_count"] >= 2).astype("Int64").where(out["xray_count"].notna())
-    out["xray_max_dim_mm"] = pd.to_numeric(df["最大径_mm"], errors="coerce")
-    # 指南阈值: 直径 >25 mm 难过幽门
-    out["xray_large"] = (out["xray_max_dim_mm"] > 25).astype("Int64").where(
-        out["xray_max_dim_mm"].notna())
+    out["xray_long_mm"] = pd.to_numeric(df.get("长径_mm"), errors="coerce")
+    out["xray_short_mm"] = pd.to_numeric(df.get("短径_mm"), errors="coerce")
 
-    for col, name in [("成串成团", "xray_clumped"), ("双环征", "xray_double_ring"),
+    # 指南阈值在此套用，原始毫米值原样保存——日后调整阈值不必重新阅片。
+    # 短径决定能否过幽门(限制因素是最小横截面)，长径决定能否过十二指肠 C 形襻。
+    # 阈值随年龄而异，婴幼儿更低；正式分析应按所引指南确认，并做阈值敏感性分析。
+    out["xray_wide_gt25"] = (out["xray_short_mm"] > PYLORUS_MM).astype("Int64").where(
+        out["xray_short_mm"].notna())
+    out["xray_long_gt60"] = (out["xray_long_mm"] > DUODENUM_MM).astype("Int64").where(
+        out["xray_long_mm"].notna())
+
+    for col, name in [("成串成团", "xray_clumped"), ("合并其他金属", "xray_magnet_plus_metal"),
+                      ("双环征", "xray_double_ring"),
                       ("膈下游离气体", "xray_free_air"), ("肠梗阻征象", "xray_obstruction")]:
         if col in df.columns:
             out[name] = df[col].map({"是": 1, "否": 0}).astype("Float64")
+
+    # 多枚磁体或单枚磁体合并金属，均按指南需干预——后者易被漏掉，故单列。
+    is_magnet = df.get("影像判断类型", pd.Series(dtype=object)).eq("磁性球形")
+    out["xray_magnet_risk"] = (
+        (is_magnet & (out["xray_count"] >= 2))
+        | out.get("xray_magnet_plus_metal", pd.Series(0, index=out.index)).eq(1)
+    ).astype("Int64")
 
     if "形态" in df.columns:
         out["xray_shape"] = df["形态"]
