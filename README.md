@@ -108,3 +108,20 @@ python3 scripts/readmission_check.py
 30 日再入院核查。观察组住院期间无穿孔、无新发并发症，但 **2/577（0.35%）
 出院后 30 日内返院接受手术**——「0 例不良结局」的说法不成立。
 射程限于本院异物相关住院，详见 `outputs/readmission_report.txt`。
+
+## 正式分析
+
+```bash
+python3 scripts/test_metrics.py              # 指标实现的构造数据验证
+python3 scripts/definitive_analysis.py       # 全量约 4 分钟
+python3 scripts/definitive_analysis.py --quick   # 冒烟测试
+```
+
+MICE 多重插补（m=20，插补模型纳入结局）＋ 惩罚多分类回归（交叉验证选参）
+＋ Bootstrap 乐观度校正（B=500）＋ 折内插补的交叉验证 ＋ 时间外部验证
+＋ 逐类校准 ＋ 多分类 DCA ＋ PDI ＋ 线性 SHAP。
+
+输出 `outputs/definitive_results.txt`、`outputs/model_coefficients.csv`、
+`outputs/figures/{roc,calibration,decision_curve}.png`。
+
+**内部效能以折内交叉验证为主报告值**，脚本会自动对照三种估计并提示。
