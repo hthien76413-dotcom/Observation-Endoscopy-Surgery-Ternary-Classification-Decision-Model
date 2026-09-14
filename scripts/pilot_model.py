@@ -21,8 +21,8 @@ warnings.filterwarnings("ignore")
 LABELS = {0: "观察", 1: "内镜", 2: "手术"}
 
 BASE_FEATURES = ["age_years", "male", "weight_kg", "temp_c", "log_ingest_hours"]
-FB_FEATURES = ["fb_battery", "fb_magnet", "fb_sharp", "fb_coin", "fb_pit", "fb_long",
-               "fb_plastic", "fb_multiple"]
+FB_FEATURES = ["fb_battery", "fb_magnet", "fb_sharp", "fb_coin", "fb_round", "fb_pit",
+               "fb_long", "fb_plastic", "fb_mercury", "fb_multiple"]
 SYM_FEATURES = ["sym_abdpain", "sym_vomit", "sym_hematemesis", "sym_fever",
                 "sym_dysphagia", "sym_distension", "sign_tenderness", "sign_peritoneal"]
 LOC_FEATURES = ["loc_esophagus", "loc_stomach", "loc_duodenum", "loc_smallbowel",

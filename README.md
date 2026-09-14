@@ -76,3 +76,13 @@ python3 scripts/build_table1.py
 
 连续变量报告中位数（IQR）与 Kruskal-Wallis 检验（效应量 epsilon²），分类变量报告
 n(%) 与卡方检验（效应量 Cramér's V）；任一期望频数 <5 时改用蒙特卡洛置换检验。
+
+## 异物类型人工核验
+
+```bash
+python3 scripts/build_fbtype_form.py     # 生成 annotation/异物类型核验表单.xlsx
+python3 scripts/ingest_fbtype.py annotation/异物类型核验表单.xlsx [第二位核验者.xlsx]
+```
+
+411 例待核验（未归类 186 + 多类命中 25 + 抽检 200），双人子集 100 例。
+回流同时给出正则 vs 人工准确率与人工 vs 人工 Kappa。
