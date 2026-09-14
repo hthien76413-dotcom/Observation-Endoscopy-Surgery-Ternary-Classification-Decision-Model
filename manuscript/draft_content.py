@@ -371,7 +371,7 @@ TABLES = [
 ]
 
 FIGURES = [
- "Fig 1. Study flow diagram (TRIPOD/STROBE format). 【TODO】",
+ "Fig 1. Study flow diagram (TRIPOD/STROBE format). (已生成：outputs/figures/fig1_flow.pdf，矢量)",
  "Fig 2. 【TODO: 见方案 §七「重复图表风险」——若磁性异物论文已用过同类趋势图，"
  "本文改画三种治疗方式的逐年构成比，或舍弃】",
  "Fig 3. Sankey diagram: object type to location to management to outcome. 【TODO】",

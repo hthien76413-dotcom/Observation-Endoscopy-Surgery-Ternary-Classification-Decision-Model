@@ -125,3 +125,12 @@ MICE 多重插补（m=20，插补模型纳入结局）＋ 惩罚多分类回归�
 `outputs/figures/{roc,calibration,decision_curve}.png`。
 
 **内部效能以折内交叉验证为主报告值**，脚本会自动对照三种估计并提示。
+
+## Fig 1 流程图
+
+```bash
+python3 scripts/build_figure1.py
+```
+
+输出 `outputs/figures/fig1_flow.{pdf,png}`。所有数字从 `outputs/cohort.csv`
+实时读取，不硬编码——队列定义改动后重跑即同步，不会出现图与正文对不上。
