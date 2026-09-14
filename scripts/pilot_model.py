@@ -27,7 +27,9 @@ SYM_FEATURES = ["sym_abdpain", "sym_vomit", "sym_hematemesis", "sym_fever",
                 "sym_dysphagia", "sym_distension", "sign_tenderness", "sign_peritoneal"]
 LOC_FEATURES = ["loc_esophagus", "loc_stomach", "loc_duodenum", "loc_smallbowel",
                 "loc_colorectal", "xray_radiopaque"]
-LAB_FEATURES = ["lab_wbc", "lab_neut_pct", "lab_crp", "lab_alb"]
+# CRP 已剔除: 净贡献仅 +0.001 宏平均 AUC，却背着 68.7% 的非随机缺失
+# (内镜组 85.0% 无 CRP)。保留 CRP 的对照见敏感性分析 S6。
+LAB_FEATURES = ["lab_wbc", "lab_neut_pct", "lab_alb"]
 
 BLOCKS = {
     "A 人口学+病史": BASE_FEATURES,
@@ -74,10 +76,10 @@ SENSITIVITY = [
      "同上，针对化验"),
     ("S5 完整病例分析", "complete", FULL,
      "不做任何填补（方法学计划要求）"),
-    ("S6 剔除 CRP", None,
+    ("S6 保留 CRP", None,
      BASE_FEATURES + FB_FEATURES + SYM_FEATURES + LOC_FEATURES
-     + ["lab_wbc", "lab_neut_pct", "lab_alb"],
-     "CRP 缺失 68.7% 且缺失与治疗相关，见缺失机制诊断"),
+     + LAB_FEATURES + ["lab_crp"],
+     "主分析已剔除 CRP，此项为保留它的对照"),
 ]
 
 
