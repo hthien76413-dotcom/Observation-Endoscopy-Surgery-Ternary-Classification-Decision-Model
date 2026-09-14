@@ -268,6 +268,12 @@ def build():
     # ---- 时间与人口学 ----
     df["入院日期"] = pd.to_datetime(df["入院日期"], errors="coerce")
     df["admit_year"] = df["入院日期"].dt.year
+    # 同一患儿的首次住院标记，供「仅首次住院」的敏感性分析使用。
+    # 只存布尔值不存日期: cohort.csv 会进版本库，精确日期会降低去标识化程度。
+    df["first_admission"] = (
+        df["入院日期"].rank(method="first").groupby(df["科研患者编号"]).transform("min")
+        == df["入院日期"].rank(method="first")
+    ).astype(int)
     df["age_years"] = pd.to_numeric(df["年龄（岁）"], errors="coerce")
     df["male"] = (df["性别"] == "男性").astype(int)
     df["weight_kg"] = pd.to_numeric(df["体重(kg)"], errors="coerce")
@@ -328,7 +334,7 @@ def build():
     df["label_name"] = df["label"].map(LABELS)
 
     keep = (
-        ["科研患者编号", "科研就诊编号", "admit_year", "label", "label_name"]
+        ["科研患者编号", "科研就诊编号", "admit_year", "first_admission", "label", "label_name"]
         + ["age_years", "male", "weight_kg", "temp_c", "ingest_hours", "log_ingest_hours"]
         + list(FB_TYPES) + list(SYMPTOMS)
         + ["xray_phase", "has_xray", "xray_radiopaque"] + list(LOCATIONS)
@@ -357,6 +363,9 @@ def build():
     lines.append("变量缺失率(%):")
     miss = (cohort.isna().mean() * 100).round(1)
     lines.append(miss[miss > 0].sort_values(ascending=False).to_string())
+    lines.append("")
+    lines.append(f"首次住院 {int(cohort['first_admission'].sum())} 例"
+                 f"（再入院 {len(cohort) - int(cohort['first_admission'].sum())} 例）")
     lines.append("")
     lines.append("影像时相(首次 X 线相对手术开始):")
     for k, v in cohort["xray_phase"].value_counts().items():
