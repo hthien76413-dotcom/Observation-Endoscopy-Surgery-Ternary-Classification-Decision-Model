@@ -86,3 +86,15 @@ python3 scripts/ingest_fbtype.py annotation/异物类型核验表单.xlsx [第�
 
 411 例待核验（未归类 186 + 多类命中 25 + 抽检 200），双人子集 100 例。
 回流同时给出正则 vs 人工准确率与人工 vs 人工 Kappa。
+
+## 投稿初稿
+
+```bash
+python3 scripts/build_manuscript.py
+```
+
+由 `manuscript/draft_content.py` 生成 `manuscript/Manuscript_draft.{docx,md}`
+与 `manuscript/TODO_checklist.md`。
+
+**初稿不可直接投稿**：Results 与结论段为占位，参考文献表刻意留空。
+改稿编辑 `draft_content.py` 后重跑，三份产物同步更新。

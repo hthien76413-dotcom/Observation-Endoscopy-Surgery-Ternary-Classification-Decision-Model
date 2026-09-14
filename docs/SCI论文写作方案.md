@@ -379,6 +379,17 @@ CRP 另需左删失处理（按 LOD/2 代入），并做「仅用可检出值」
 
 ## 八、正文写作大纲
 
+> **初稿已生成**：`manuscript/Manuscript_draft.docx`（双倍行距、连续行号，符合送审格式）
+> 与 `.md`。正文约 2150 词，含 32 处 `【TODO】` 占位、10 处 `[REF-n]` 待补文献、
+> 12 处预试验数值，清单见 `manuscript/TODO_checklist.md`。
+>
+> Introduction、Methods、Discussion 的论证部分已完整成文；Results 与结论段按占位保留，
+> 待正式分析后填入。**参考文献表刻意留空**——正文只标注了需要哪一类文献，
+> 请补入真实引用后再建表，避免误投带占位的稿件。
+>
+> 改稿请编辑 `manuscript/draft_content.py` 后重跑 `python3 scripts/build_manuscript.py`，
+> 三份产物（docx / md / 清单）同步更新，清单会自动重新统计。
+
 ### Title（备选）
 1. *Machine-learning–based ternary decision model for observation, endoscopy, or surgery in children with gastrointestinal foreign bodies: a 10-year cohort of 1238 admissions*
 2. *Predicting the need for endoscopic or surgical intervention in paediatric gastrointestinal foreign body ingestion: development and temporal validation of a three-class model*

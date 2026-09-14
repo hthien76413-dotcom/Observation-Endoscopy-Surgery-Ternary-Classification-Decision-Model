@@ -126,6 +126,17 @@ Front Pediatr；仅在磁性异物文已见刊且前几家均未中时，才把 
 是否手术由客观病理状态决定，胃内钝性异物取不取则含实践差异成分。
 此点写进 Discussion 核心位置，不要当作局限性掩盖。
 
+## 投稿初稿
+
+`manuscript/draft_content.py` 是唯一的正文来源，改稿改它，然后重跑
+`scripts/build_manuscript.py` 同步生成 docx / md / TODO 清单。不要直接编辑产物。
+
+约定：`【TODO: …】` 待正式分析填写；`[REF-n: …]` 待补真实文献；`《数字》` 来自预试验须更新。
+**参考文献表刻意留空，不要生成带占位的文献表**——会增加误投风险。
+**绝不编造文献。**
+
+Introduction、Methods、Discussion 论证部分已成文；Results 与结论段待正式分析。
+
 ## 用户
 
 儿外科医师。中文沟通。
