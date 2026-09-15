@@ -1,6 +1,6 @@
 # 投稿前待办清单
 
-由 `scripts/build_manuscript.py` 自动生成。共 27 处占位、11 处待补文献、13 处预试验数值。
+由 `scripts/build_manuscript.py` 自动生成。共 28 处占位、11 处待补文献、13 处预试验数值。
 
 ## 一、正式分析完成后必须替换的占位
 
@@ -13,6 +13,7 @@
 - [ ] 影像定位重新标注完成后，补充节段定位、长径/短径与磁体数目的定义
 - [ ] 人工核验的准确率与 Cohen's kappa——由异物类型核验表单的 C 抽检组与双人子集产出
 - [ ] 批件号与批准日期
+- [ ] 逐一核对后确认「两文不共用任何图表与结果」这一句成立——Fig 2 与 Table 4 是风险点。该文已定稿投出，图表清单固定，现在即可核；核完前不要把这句当已证实的事实投出去
 - [ ] 2020 年的解释——需核对该年是否因疫情期间就诊延迟、仅重症就医而改变了住院人群构成；n=50 是全期最小，比例波动本身也大，勿过度解读
 - [ ] 调阅这两例病历，说明再入院时的异物位置与手术所见——surgery. Review of both records showed an object retained for weeks with a clear indication for intervention, and in both the index discharge followed a family decision rather than a clinical judgement that observation was appropriate. In one, a pebble measuring 19 x 11 mm had lodged at the ileocaecal region for 11 days with rectal bleeding, and was removed at laparotomy after laparoscopy and colonoscopy failed to retrieve it. In the other, two magnetic objects had been retained for a month and computed tomography showed them apposed across the gastric wall; the child returned with a gastrocolic fistula and gastric perforation requiring repair.
 Obstruction, peritonitis or sepsis appeared among the discharge diagnoses of ten observation admissions, but in every instance the diagnosis was coded as present on admission rather than arising during the admission, and several were unrelated to the ingested object (appendicitis with abscess, faecal impaction, colitis). No new-onset complication was recorded in the observation group.
@@ -49,7 +50,7 @@ This cohort contains only admissions for foreign body ingestion at this institut
 - [ ] `[REF-8]` Pate/Riley 多分类最小样本量文献
 - [ ] `[REF-8]` Bootstrap 乐观度校正方法学文献
 - [ ] `[REF-9]` 决策曲线分析方法学文献
-- [ ] `[REF-10]` 作者本人的磁性异物论文，见刊后补入完整引用；投稿时若仍在审，按期刊要求随稿提供
+- [ ] `[REF-10]` 作者本人的磁性异物论文，已投 JPGN 在审。须向用户索取题目、作者序与投稿日期；见刊或挂出 medRxiv 预印本后补入完整引用，在此之前按 「under review」 处理
 
 ## 三、来自预试验、须以正式分析结果更新的数值
 

@@ -3,7 +3,7 @@
 *Running head: A three-class decision model for paediatric GI foreign bodies*
 
 > **这是初稿，不可直接投稿。**
-> 正文含 27 处 `【TODO】` 占位、11 处 `[REF-n]` 待补文献。
+> 正文含 28 处 `【TODO】` 占位、11 处 `[REF-n]` 待补文献。
 > `《数字》` 标记的值来自预试验（5 折交叉验证、中位数填补、未做影像重标注），
 > 正式分析后必须更新。清单见 `TODO_checklist.md`。
 
@@ -89,9 +89,9 @@ Prespecified sensitivity analyses addressed: restriction to first admissions; ex
 
 The study was approved by the institutional ethics committee (【TODO: 批件号与批准日期】) with waiver of informed consent for this retrospective analysis of de-identified records.
 
-### 2.8. Relation to a previous report
+### 2.8. Relation to a companion report
 
-This cohort has been partly described in a separate report concerning the epidemiology of magnetic foreign body ingestion [REF-10: 作者本人的磁性异物论文，见刊后补入完整引用；投稿时若仍在审，按期刊要求随稿提供]. The present study addresses a different question, with a different outcome variable and analytical approach, and no figure, table or result is shared between the two reports.
+This cohort has been partly described in a separate report on the epidemiology of magnetic foreign body ingestion, by the same authors and currently under review [REF-10: 作者本人的磁性异物论文，已投 JPGN 在审。须向用户索取题目、作者序与投稿日期；见刊或挂出 medRxiv 预印本后补入完整引用，在此之前按 「under review」 处理]. The present study addresses a different question, with a different outcome variable and a different analytical approach: that report describes what children swallow and how often magnets perforate, whereas this one predicts which of three management decisions a child will receive. 【TODO: 逐一核对后确认「两文不共用任何图表与结果」这一句成立——Fig 2 与 Table 4 是风险点。该文已定稿投出，图表清单固定，现在即可核；核完前不要把这句当已证实的事实投出去】
 
 ## 3. Results
 
