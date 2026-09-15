@@ -1,6 +1,6 @@
 # 投稿前待办清单
 
-由 `scripts/build_manuscript.py` 自动生成。共 31 处占位、10 处待补文献、13 处预试验数值。
+由 `scripts/build_manuscript.py` 自动生成。共 27 处占位、11 处待补文献、13 处预试验数值。
 
 ## 一、正式分析完成后必须替换的占位
 
@@ -12,18 +12,14 @@
 - [ ] 说明人工核验的例数与一致性——建议随机抽取 100 例由一位不参与建模的医师独立核对分类
 - [ ] 影像定位重新标注完成后，补充节段定位、长径/短径与磁体数目的定义
 - [ ] 人工核验的准确率与 Cohen's kappa——由异物类型核验表单的 C 抽检组与双人子集产出
-- [ ] 填补诊断——插补前后分布比较图，置补充材料
-- [ ] 按 Riley 等的最小样本量标准计算并写明结果
-- [ ] 说明是 LASSO 还是 ridge，以及惩罚参数如何选择
-- [ ] 分析软件与版本
 - [ ] 批件号与批准日期
 - [ ] 2020 年的解释——需核对该年是否因疫情期间就诊延迟、仅重症就医而改变了住院人群构成；n=50 是全期最小，比例波动本身也大，勿过度解读
 - [ ] 调阅这两例病历，说明再入院时的异物位置与手术所见——surgery. Review of both records showed an object retained for weeks with a clear indication for intervention, and in both the index discharge followed a family decision rather than a clinical judgement that observation was appropriate. In one, a pebble measuring 19 x 11 mm had lodged at the ileocaecal region for 11 days with rectal bleeding, and was removed at laparotomy after laparoscopy and colonoscopy failed to retrieve it. In the other, two magnetic objects had been retained for a month and computed tomography showed them apposed across the gastric wall; the child returned with a gastrocolic fistula and gastric perforation requiring repair.
 Obstruction, peritonitis or sepsis appeared among the discharge diagnoses of ten observation admissions, but in every instance the diagnosis was coded as present on admission rather than arising during the admission, and several were unrelated to the ingested object (appendicitis with abscess, faecal impaction, colitis). No new-onset complication was recorded in the observation group.
 This cohort contains only admissions for foreign body ingestion at this institution, so the readmission analysis cannot detect children who presented elsewhere, were admitted under a different diagnosis, or were managed in outpatient follow-up. The figures above should be read as institution-level foreign-body readmission, not as an absence of delayed intervention.
-【TODO: 全部效能结果。当前预试验值（5 折交叉验证、中位数填补、未做重标注）为：多分类 Logistic 宏平均 AUC 0.788（观察 0.725、内镜 0.735、手术 0.904）；随机森林宏平均 0.796；时间验证手术 AUC 0.945、宏平均 0.773。这些数字仅供占位，正式分析后整段重写。改写时须引 Fig 4，并以折内交叉验证值为内部效能的主报告值——表观 0.826 与 Bootstrap 校正 0.807 均偏乐观，不可单报
-- [ ] 校准结果——逐类校准斜率与截距、校准曲线（Fig 5A）。要点已明确：交叉验证校准良好（斜率 0.93/0.97/1.15，截距均近 0），时间验证截距明显漂移（观察 +0.46、内镜 −0.32、手术 −0.57），方向与构成比变化一致。须写明「判别力经受住时间验证、校准没有」，并给出重估截距的建议——否则读者会默认时间验证通过即可直接部署
-- [ ] 决策曲线分析结果——各类别在临床相关阈值区间的净获益（Fig 5B）。模型优于两条参照线的区间：观察 0.21–0.75、内镜 0.07–0.74、手术 0.02–0.80。低于该区间时 treat-all 更优，这是阈值低于患病率时的常态，须一并说明，不要只报优势区间
+【TODO: 全部效能结果。当前预试验值（5 折交叉验证、中位数填补、未做重标注）为：多分类 Logistic 宏平均 AUC 0.788（观察 0.725、内镜 0.735、手术 0.904）；随机森林宏平均 0.796；时间验证手术 AUC 0.945、宏平均 0.773。这些数字仅供占位，正式分析后整段重写。改写时须引 Fig 4，并以折内交叉验证值为内部效能的主报告值——表观 0.832 与 Bootstrap 校正 0.814 均偏乐观，不可单报
+- [ ] 校准结果——逐类校准斜率与截距、校准曲线（Fig 5A）。要点已明确：交叉验证校准良好（斜率 0.95/0.98/1.13，截距均近 0），时间验证截距明显漂移（观察 +0.43、内镜 −0.28、手术 −0.55），方向与构成比变化一致。须写明「判别力经受住时间验证、校准没有」，并给出重估截距的建议——否则读者会默认时间验证通过即可直接部署
+- [ ] 决策曲线分析结果——各类别在临床相关阈值区间的净获益（Fig 5B）。模型优于两条参照线的区间：观察 0.15–0.71、内镜 0.07–0.79、手术 0.02–0.78。低于该区间时 treat-all 更优，这是阈值低于患病率时的常态，须一并说明，不要只报优势区间
 - [ ] 依正式模型改写
 - [ ] 依正式结果填表并改写
 - [ ] 首段依正式结果改写
@@ -50,6 +46,7 @@ This cohort contains only admissions for foreign body ingestion at this institut
 - [ ] `[REF-5]` TRIPOD+AI 2024 声明
 - [ ] `[REF-6]` STROBE 声明
 - [ ] `[REF-7]` Riley 等预测模型最小样本量方法学文献
+- [ ] `[REF-8]` Pate/Riley 多分类最小样本量文献
 - [ ] `[REF-8]` Bootstrap 乐观度校正方法学文献
 - [ ] `[REF-9]` 决策曲线分析方法学文献
 - [ ] `[REF-10]` 作者本人的磁性异物论文，见刊后补入完整引用；投稿时若仍在审，按期刊要求随稿提供

@@ -66,6 +66,32 @@ def feature_columns(df):
 # --------------------------------------------------------------------------
 # 插补
 # --------------------------------------------------------------------------
+def observed_bounds(block):
+    """每个变量的观测最小/最大值，用作插补取值的上下界。
+
+    sample_posterior=True 是从无界正态后验抽样，会抽出临床上不可能的值：
+    实测出现过负体重、负白细胞、−13% 与 109% 的中性粒细胞比例
+    （11220 个插补值里 20 个，0.18%）。对模型影响可忽略，但补充图 S1
+    一画出来就看得见，审稿人会问。
+
+    夹到观测范围内是 MICE 的常规做法，也不必为每个变量维护一张临床阈值表；
+    代价是插补值不会比观测到的任何一例更极端，在本队列（n=1238、缺失
+    11–21%）观测范围已足够充分，这个代价可以接受。
+
+    二分类列与结局列的观测范围本身就是 0/1，无须特殊处理。
+    """
+    lo = block.min(axis=0).to_numpy(dtype=float)
+    hi = block.max(axis=0).to_numpy(dtype=float)
+    # 整列缺失时 min/max 为 NaN，退回无界，否则 sklearn 会报错
+    lo = np.where(np.isnan(lo), -np.inf, lo)
+    hi = np.where(np.isnan(hi), np.inf, hi)
+    # 常量列会使 min == max，sklearn 要求严格小于。时间验证子集里
+    # sym_dysphagia 恒为 0 即属此列（它本身没有缺失，但边界仍要通过校验）。
+    flat = hi <= lo
+    hi = np.where(flat, lo + np.maximum(np.abs(lo), 1.0) * 1e-6, hi)
+    return lo, hi
+
+
 def impute(X, y, n_imputations, seed, include_outcome=True):
     """链式方程多重插补。
 
@@ -78,7 +104,9 @@ def impute(X, y, n_imputations, seed, include_outcome=True):
         if include_outcome and y is not None:
             for k in range(len(LABELS)):
                 block[f"__y{k}"] = (y == k).astype(float)
+        lo, hi = observed_bounds(block)
         imputer = IterativeImputer(max_iter=10, sample_posterior=True,
+                                   min_value=lo, max_value=hi,
                                    random_state=seed + i)
         filled = pd.DataFrame(imputer.fit_transform(block), columns=block.columns,
                               index=block.index)
@@ -171,7 +199,9 @@ def cross_validated_proba(X, y, penalty, C, m_cv, seed, n_splits=5):
             block = Xtr.copy()
             for k in range(len(LABELS)):
                 block[f"__y{k}"] = (ytr == k).astype(float)
+            lo, hi = observed_bounds(block)      # 只用训练折的范围，避免跨折泄漏
             imp = IterativeImputer(max_iter=10, sample_posterior=True,
+                                   min_value=lo, max_value=hi,
                                    random_state=seed + i)
             imp.fit(block)
             tr_filled = pd.DataFrame(imp.transform(block), columns=block.columns,

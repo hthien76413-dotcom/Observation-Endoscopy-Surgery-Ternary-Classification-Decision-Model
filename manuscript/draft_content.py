@@ -164,17 +164,55 @@ BODY = [
  "imputation was not used, and missingness indicators were not offered as predictors. "
  "C-reactive protein was excluded from the predictor set: it contributed negligibly "
  "while carrying 《68.7%》 non-random missingness. Complete-case analysis is reported "
- "only as a sensitivity analysis. 【TODO: 填补诊断——插补前后分布比较图，置补充材料】"]),
+ "only as a sensitivity analysis.",
+
+ "Draws were constrained to the observed range of each variable. Without that "
+ "constraint the posterior draws are unbounded and a small number of impossible "
+ "values appear \u2014 negative weights and leucocyte counts, neutrophil percentages "
+ "outside 0 to 100 \u2014 amounting to 20 of 11 220 imputed values before the "
+ "constraint was applied. Observed and imputed distributions are compared in "
+ "Supplementary Figure S1. They are not expected to coincide: the missingness is "
+ "informative, so a perfect overlap would indicate that the imputation model had "
+ "ignored the outcome and the remaining covariates rather than that it had "
+ "performed well."]),
 
 ("2.5. Sample size", [
- "【TODO: 按 Riley 等的最小样本量标准计算并写明结果】 The smallest outcome class "
- "comprised 135 events, which constrains the number of estimable parameters; penalised "
- "regression was used for this reason rather than as a preference "
- "[REF-7: Riley 等预测模型最小样本量方法学文献]."]),
+ "The cohort comprises every eligible admission over ten years, so the sample size "
+ "was fixed by the study period rather than chosen. We therefore report the sample "
+ "size criteria of Riley and colleagues as an audit of what the available data "
+ "support, not as an a priori calculation [REF-7: Riley 等预测模型最小样本量方法学文献]. "
+ "For a multinomial model the criteria were applied to each pairwise comparison in "
+ "turn and the most demanding taken [REF-8: Pate/Riley 多分类最小样本量文献]. The "
+ "anticipated Cox\u2013Snell R\u00b2 was taken from the cross-validated predictions "
+ "rather than the apparent ones, since using an optimistic R\u00b2 would understate "
+ "the sample size required.",
+
+ "With 32 predictor parameters, none of the three comparisons is fully supported. "
+ "Expressed as whole-cohort equivalents, observation versus surgery requires "
+ "1 417 admissions and endoscopy versus surgery 1 471, against the 1 238 "
+ "available; for both, the binding criterion is that apparent and adjusted "
+ "Nagelkerke R\u00b2 differ by no more than 0.05. The observation versus endoscopy "
+ "comparison requires 2 095, and there the binding criterion is expected "
+ "shrinkage of no more than 10%.",
+
+ "This shortfall is a property of the clinical problem rather than an oversight, and "
+ "it runs in the same direction as our central finding. The requirement rises as the "
+ "outcome becomes harder to predict, and the observation\u2013endoscopy distinction is "
+ "precisely the one the data separate least well. It is why the model is penalised, "
+ "why we report fold-internal cross-validation rather than apparent performance, and "
+ "why we do not propose the observation\u2013endoscopy probabilities as a decision "
+ "rule. We state it here rather than in the limitations alone, because it bears on "
+ "how the model should be read throughout."]),
 
 ("2.6. Statistical analysis", [
- "The primary model was a penalised multinomial logistic regression 【TODO: 说明是 "
- "LASSO 还是 ridge，以及惩罚参数如何选择】 with observation as the reference class. "
+ "The primary model was a penalised multinomial logistic regression with observation "
+ "as the reference class. The penalty type (L1 or L2) and its strength were selected "
+ "together by five-fold cross-validation over a grid, minimising multiclass "
+ "log-loss; an L1 (lasso) penalty was selected, at the inverse-strength value "
+ "C = 0.1. Selection was performed once on a median-filled copy of the data and the "
+ "chosen penalty then held fixed across the imputed datasets; this keeps the "
+ "computation tractable but means the optimism correction is slightly "
+ "anticonservative, as noted below. "
  "Random forest and gradient boosting models were fitted for comparison, to establish "
  "whether a more flexible algorithm offered material benefit over an interpretable one.",
 
@@ -189,7 +227,15 @@ BODY = [
  "by class-specific calibration curves with slope and intercept. Overall performance "
  "used the multiclass Brier score. Clinical utility was assessed by decision curve "
  "analysis reporting net benefit per class [REF-9: 决策曲线分析方法学文献]. Variable "
- "contributions were summarised with SHAP values. 【TODO: 分析软件与版本】",
+ "contributions were summarised with SHAP values; because the model is linear on the "
+ "log-odds scale these were computed exactly rather than approximated.",
+
+ "Analyses used Python 3.11.15 with scikit-learn 1.9.1, pandas 3.0.5, NumPy 2.4.6, "
+ "SciPy 1.17.1 and Matplotlib 3.11.2. Multiple imputation used scikit-learn's "
+ "IterativeImputer, which remains an experimental module in that library. "
+ "Multiclass discrimination, calibration and net-benefit measures have no established "
+ "implementation and were written for this study; they are verified against "
+ "constructed data in the accompanying code.",
 
  "Prespecified sensitivity analyses addressed: restriction to first admissions; "
  "exclusion of all laboratory predictors; restriction to admissions with pre-decision "
@@ -263,17 +309,17 @@ BODY = [
  "多分类 Logistic 宏平均 AUC 0.788（观察 0.725、内镜 0.735、手术 0.904）；"
  "随机森林宏平均 0.796；时间验证手术 AUC 0.945、宏平均 0.773。"
  "这些数字仅供占位，正式分析后整段重写。改写时须引 Fig 4，"
- "并以折内交叉验证值为内部效能的主报告值——表观 0.826 与 Bootstrap "
- "校正 0.807 均偏乐观，不可单报】",
+ "并以折内交叉验证值为内部效能的主报告值——表观 0.832 与 Bootstrap "
+ "校正 0.814 均偏乐观，不可单报】",
 
  "【TODO: 校准结果——逐类校准斜率与截距、校准曲线（Fig 5A）。"
- "要点已明确：交叉验证校准良好（斜率 0.93/0.97/1.15，截距均近 0），"
- "时间验证截距明显漂移（观察 +0.46、内镜 −0.32、手术 −0.57），"
+ "要点已明确：交叉验证校准良好（斜率 0.95/0.98/1.13，截距均近 0），"
+ "时间验证截距明显漂移（观察 +0.43、内镜 −0.28、手术 −0.55），"
  "方向与构成比变化一致。须写明「判别力经受住时间验证、校准没有」，"
  "并给出重估截距的建议——否则读者会默认时间验证通过即可直接部署】",
 
  "【TODO: 决策曲线分析结果——各类别在临床相关阈值区间的净获益（Fig 5B）。"
- "模型优于两条参照线的区间：观察 0.21–0.75、内镜 0.07–0.74、手术 0.02–0.80。"
+ "模型优于两条参照线的区间：观察 0.15–0.71、内镜 0.07–0.79、手术 0.02–0.78。"
  "低于该区间时 treat-all 更优，这是阈值低于患病率时的常态，须一并说明，"
  "不要只报优势区间】"]),
 
