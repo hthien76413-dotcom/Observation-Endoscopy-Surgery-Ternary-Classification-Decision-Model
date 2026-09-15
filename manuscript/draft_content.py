@@ -381,7 +381,13 @@ FIGURES = [
  "Fig 1. Study flow diagram (TRIPOD/STROBE format). (已生成：outputs/figures/fig1_flow.pdf，矢量)",
  "Fig 2. Management delivered by year of admission, as a proportion of admissions. "
  "(已生成：outputs/figures/fig2_trend.pdf，矢量)",
- "Fig 3. Sankey diagram: object type to location to management to outcome. 【TODO】",
+ "Fig 3. Sankey diagram of the care pathway: object type to management to outcome. "
+ "Ribbons are coloured by management. Objects matching more than one category are "
+ "assigned to the highest-risk one (magnetic > button battery > sharp > coin or blunt "
+ "metal > fruit pit > long > other). Most perforations were present on admission and "
+ "were therefore the indication for surgery rather than a consequence of it. "
+ "(已生成：outputs/figures/fig3_sankey.pdf，矢量。X 线重标注回流后脚本会自动插入"
+ "「消化道位置」一层，届时重跑即成四段图)",
  "Fig 4. Receiver operating characteristic curves, one-versus-rest, development and "
  "temporal validation. 【TODO】",
  "Fig 5. Class-specific calibration curves and decision curve analysis. 【TODO】",
