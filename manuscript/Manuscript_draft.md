@@ -105,9 +105,9 @@ This cohort contains only admissions for foreign body ingestion at this institut
 
 【TODO: 全部效能结果。当前预试验值（5 折交叉验证、中位数填补、未做重标注）为：多分类 Logistic 宏平均 AUC 0.788（观察 0.725、内镜 0.735、手术 0.904）；随机森林宏平均 0.796；时间验证手术 AUC 0.945、宏平均 0.773。这些数字仅供占位，正式分析后整段重写。改写时须引 Fig 4，并以折内交叉验证值为内部效能的主报告值——表观 0.826 与 Bootstrap 校正 0.807 均偏乐观，不可单报】
 
-【TODO: 校准结果——逐类校准斜率与截距、校准曲线（Fig 5A）】
+【TODO: 校准结果——逐类校准斜率与截距、校准曲线（Fig 5A）。要点已明确：交叉验证校准良好（斜率 0.93/0.97/1.15，截距均近 0），时间验证截距明显漂移（观察 +0.46、内镜 −0.32、手术 −0.57），方向与构成比变化一致。须写明「判别力经受住时间验证、校准没有」，并给出重估截距的建议——否则读者会默认时间验证通过即可直接部署】
 
-【TODO: 决策曲线分析结果——各类别在临床相关阈值区间的净获益（Fig 5B）】
+【TODO: 决策曲线分析结果——各类别在临床相关阈值区间的净获益（Fig 5B）。模型优于两条参照线的区间：观察 0.21–0.75、内镜 0.07–0.74、手术 0.02–0.80。低于该区间时 treat-all 更优，这是阈值低于患病率时的常态，须一并说明，不要只报优势区间】
 
 ### 3.3. Variable importance
 
@@ -162,7 +162,7 @@ This study has important limitations. First, and most fundamentally, the outcome
 - Fig 2. Management delivered by year of admission, as a proportion of admissions. (已生成：outputs/figures/fig2_trend.pdf，矢量)
 - Fig 3. Sankey diagram of the care pathway: object type to management to outcome. Ribbons are coloured by management. Objects matching more than one category are assigned to the highest-risk one (magnetic > button battery > sharp > coin or blunt metal > fruit pit > long > other). Most perforations were present on admission and were therefore the indication for surgery rather than a consequence of it. (已生成：outputs/figures/fig3_sankey.pdf，矢量。X 线重标注回流后脚本会自动插入「消化道位置」一层，届时重跑即成四段图)
 - Fig 4. Receiver operating characteristic curves, one-versus-rest. (A) Internal validation by 5-fold cross-validation with imputation performed separately within each fold (N = 1238). (B) Temporal validation: the model fitted on 2016–2023 admissions applied unchanged to admissions after 2023 (N = 413). Areas under the curve are shown with 95% bootstrap confidence intervals from 2000 resamples of cases; class sizes are in parentheses. Apparent (in-sample) curves are not shown because they overstate discrimination by about 0.03 macro AUC. (已生成：outputs/figures/fig4_roc.pdf，矢量)
-- Fig 5. Class-specific calibration curves and decision curve analysis. 【TODO】
+- Fig 5. (A) Class-specific calibration and (B) decision curve analysis. (A) Calibration slope / intercept are given above each panel for the cross-validated (CV) and temporal (Temp) predictions; the shaded strip shows the distribution of predicted probabilities. Discrimination survives temporal validation but calibration does not: the intercepts move with the case mix (observation 47.1 → 55.9%, endoscopy 42.0 → 36.3%, surgery 10.9 → 7.7%), so the intercepts would require re-estimation before use in a later period. (B) Net benefit from the cross-validated predictions; shading marks the threshold range over which the model exceeds both default strategies. (已生成：outputs/figures/fig5_calibration_dca.pdf，矢量)
 - Fig 6. SHAP summary plot or nomogram. 【TODO】
 
 ## References

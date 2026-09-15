@@ -22,8 +22,8 @@
 Obstruction, peritonitis or sepsis appeared among the discharge diagnoses of ten observation admissions, but in every instance the diagnosis was coded as present on admission rather than arising during the admission, and several were unrelated to the ingested object (appendicitis with abscess, faecal impaction, colitis). No new-onset complication was recorded in the observation group.
 This cohort contains only admissions for foreign body ingestion at this institution, so the readmission analysis cannot detect children who presented elsewhere, were admitted under a different diagnosis, or were managed in outpatient follow-up. The figures above should be read as institution-level foreign-body readmission, not as an absence of delayed intervention.
 【TODO: 全部效能结果。当前预试验值（5 折交叉验证、中位数填补、未做重标注）为：多分类 Logistic 宏平均 AUC 0.788（观察 0.725、内镜 0.735、手术 0.904）；随机森林宏平均 0.796；时间验证手术 AUC 0.945、宏平均 0.773。这些数字仅供占位，正式分析后整段重写。改写时须引 Fig 4，并以折内交叉验证值为内部效能的主报告值——表观 0.826 与 Bootstrap 校正 0.807 均偏乐观，不可单报
-- [ ] 校准结果——逐类校准斜率与截距、校准曲线（Fig 5A）
-- [ ] 决策曲线分析结果——各类别在临床相关阈值区间的净获益（Fig 5B）
+- [ ] 校准结果——逐类校准斜率与截距、校准曲线（Fig 5A）。要点已明确：交叉验证校准良好（斜率 0.93/0.97/1.15，截距均近 0），时间验证截距明显漂移（观察 +0.46、内镜 −0.32、手术 −0.57），方向与构成比变化一致。须写明「判别力经受住时间验证、校准没有」，并给出重估截距的建议——否则读者会默认时间验证通过即可直接部署
+- [ ] 决策曲线分析结果——各类别在临床相关阈值区间的净获益（Fig 5B）。模型优于两条参照线的区间：观察 0.21–0.75、内镜 0.07–0.74、手术 0.02–0.80。低于该区间时 treat-all 更优，这是阈值低于患病率时的常态，须一并说明，不要只报优势区间
 - [ ] 依正式模型改写
 - [ ] 依正式结果填表并改写
 - [ ] 首段依正式结果改写

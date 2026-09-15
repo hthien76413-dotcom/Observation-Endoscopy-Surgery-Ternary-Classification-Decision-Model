@@ -266,9 +266,16 @@ BODY = [
  "并以折内交叉验证值为内部效能的主报告值——表观 0.826 与 Bootstrap "
  "校正 0.807 均偏乐观，不可单报】",
 
- "【TODO: 校准结果——逐类校准斜率与截距、校准曲线（Fig 5A）】",
+ "【TODO: 校准结果——逐类校准斜率与截距、校准曲线（Fig 5A）。"
+ "要点已明确：交叉验证校准良好（斜率 0.93/0.97/1.15，截距均近 0），"
+ "时间验证截距明显漂移（观察 +0.46、内镜 −0.32、手术 −0.57），"
+ "方向与构成比变化一致。须写明「判别力经受住时间验证、校准没有」，"
+ "并给出重估截距的建议——否则读者会默认时间验证通过即可直接部署】",
 
- "【TODO: 决策曲线分析结果——各类别在临床相关阈值区间的净获益（Fig 5B）】"]),
+ "【TODO: 决策曲线分析结果——各类别在临床相关阈值区间的净获益（Fig 5B）。"
+ "模型优于两条参照线的区间：观察 0.21–0.75、内镜 0.07–0.74、手术 0.02–0.80。"
+ "低于该区间时 treat-all 更优，这是阈值低于患病率时的常态，须一并说明，"
+ "不要只报优势区间】"]),
 
 ("3.3. Variable importance", [
  "【TODO: 依正式模型改写】 In the pilot analysis the interval from ingestion to "
@@ -399,6 +406,15 @@ FIGURES = [
  "Apparent (in-sample) curves are not shown because they overstate "
  "discrimination by about 0.03 macro AUC. "
  "(已生成：outputs/figures/fig4_roc.pdf，矢量)",
- "Fig 5. Class-specific calibration curves and decision curve analysis. 【TODO】",
+ "Fig 5. (A) Class-specific calibration and (B) decision curve analysis. "
+ "(A) Calibration slope / intercept are given above each panel for the "
+ "cross-validated (CV) and temporal (Temp) predictions; the shaded strip shows "
+ "the distribution of predicted probabilities. Discrimination survives temporal "
+ "validation but calibration does not: the intercepts move with the case mix "
+ "(observation 47.1 → 55.9%, endoscopy 42.0 → 36.3%, surgery 10.9 → "
+ "7.7%), so the intercepts would require re-estimation before use in a later "
+ "period. (B) Net benefit from the cross-validated predictions; shading marks "
+ "the threshold range over which the model exceeds both default strategies. "
+ "(已生成：outputs/figures/fig5_calibration_dca.pdf，矢量)",
  "Fig 6. SHAP summary plot or nomogram. 【TODO】",
 ]
