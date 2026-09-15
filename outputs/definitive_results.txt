@@ -31,7 +31,7 @@
 ------------------------------------------------------------------------------
 四、Bootstrap 乐观度校正（B=500，在第 1 份插补集上）
 ------------------------------------------------------------------------------
-  macro_auc    表观 0.8259　乐观度 +0.0188　校正后 0.8071
+  macro_auc    表观 0.8259　乐观度 +0.0187　校正后 0.8071
   pdi          表观 0.7611　乐观度 +0.0244　校正后 0.7368
   brier        表观 0.4352　乐观度 -0.0216　校正后 0.4569
   说明：惩罚强度在循环外选定，故乐观度略被低估，正文须交代。
@@ -87,6 +87,8 @@
   内镜   校准斜率 0.899　截距 -0.316
   手术   校准斜率 1.331　截距 -0.569
 
+  逐例预测概率已写入 outputs/predictions.csv（set 列区分三套）。
+
 ------------------------------------------------------------------------------
 七、系数（Rubin 规则合并）
 ------------------------------------------------------------------------------
@@ -122,9 +124,10 @@
 ------------------------------------------------------------------------------
 八、变量贡献（线性模型的精确 SHAP：β_j ×（x_j − 均值））
 ------------------------------------------------------------------------------
-  【观察】log_ingest_hours=0.210　lab_neut_pct=0.170　xray_radiopaque=0.110　loc_esophagus=0.060　weight_kg=0.055　sym_vomit=0.048
+  【观察】log_ingest_hours=0.209　lab_neut_pct=0.170　xray_radiopaque=0.110　loc_esophagus=0.060　weight_kg=0.055　sym_vomit=0.048
   【内镜】fb_coin=0.457　fb_long=0.131　sign_tenderness=0.071　fb_multiple=0.065　lab_alb=0.058　sym_fever=0.057
-  【手术】log_ingest_hours=0.527　fb_magnet=0.420　lab_neut_pct=0.399　sign_tenderness=0.186　fb_coin=0.133　sym_vomit=0.124
+  【手术】log_ingest_hours=0.527　fb_magnet=0.420　lab_neut_pct=0.400　sign_tenderness=0.186　fb_coin=0.133　sym_vomit=0.124
 
-图已输出：outputs/figures/{roc,calibration,decision_curve}.png
+诊断图已输出：outputs/figures/{roc_apparent_DIAGNOSTIC,calibration,decision_curve}.png
+稿件 Fig 4 由 scripts/build_figure4.py 生成，用的是交叉验证与时间验证的概率。
 ==============================================================================

@@ -125,6 +125,12 @@ Front Pediatr；仅在磁性异物文已见刊且前几家均未中时，才把 
 
 脚本会自动比较并在报告里提示。切勿只报 Bootstrap 校正值。
 
+**Fig 4 同样只能画交叉验证与时间验证的曲线。** 表观与交叉验证差 0.034，
+若图画表观而 Table 3 报交叉验证，曲线下面积是能从图上量出来的，审稿人一核即穿帮。
+三套逐例概率存在 `outputs/predictions.csv` 的 `set` 列（apparent / cv / temporal），
+`build_figure4.py` 只取后两套。表观曲线另存为 `roc_apparent_DIAGNOSTIC.png`，
+文件名与图内标题都标了「不可入稿」——不要把它当成 Fig 4。
+
 插补泄漏诊断显示「纳入结局 vs 不纳入」仅差 0.006，不是主要问题；
 真正的差距来自表观 vs 交叉验证。
 

@@ -8,7 +8,8 @@
 输出:
     outputs/definitive_results.txt     完整文字报告
     outputs/model_coefficients.csv     Rubin 规则合并后的系数
-    outputs/figures/*.png              ROC、校准、决策曲线
+    outputs/predictions.csv            逐例预测概率（表观 / 交叉验证 / 时间验证）
+    outputs/figures/*.png              诊断用图（正式图件见 build_figure4.py 等）
 
 与预试验（scripts/pilot_model.py）的区别——预试验用 5 折交叉验证 + 中位数填补，
 只为估计可行性；本脚本才是论文的正式分析：
@@ -210,6 +211,32 @@ def pool_coefficients(fits, feature_names):
 
 
 # --------------------------------------------------------------------------
+# 预测概率落盘
+# --------------------------------------------------------------------------
+def save_predictions(blocks, path):
+    """把逐例预测概率写出，供作图脚本读取。
+
+    三套概率的含义完全不同，混用会让图与正文对不上，故用 set 列区分：
+
+      apparent  模型在自己的训练数据上预测——必然乐观，只作诊断，不可入稿
+      cv        折内插补的 5 折交叉验证——**内部效能的主报告值，Fig 4 用这个**
+      temporal  2024 年以后的独立时段——时间外部验证
+
+    分开落盘而非只存一套，是为了让作图脚本无法「随手拿错那一套」：
+    取哪一套必须在代码里写明 set 值。
+    """
+    rows = []
+    for name, y_true, proba in blocks:
+        for i in range(len(y_true)):
+            rows.append({"set": name, "label": int(y_true[i]),
+                         "p_obs": proba[i, 0], "p_endo": proba[i, 1],
+                         "p_surg": proba[i, 2]})
+    df = pd.DataFrame(rows)
+    df.to_csv(path, index=False, encoding="utf-8-sig")
+    return df
+
+
+# --------------------------------------------------------------------------
 # 图
 # --------------------------------------------------------------------------
 # 图件进入英文稿件，故图内一律用英文标签；
@@ -227,7 +254,10 @@ def make_figures(y, proba, outdir):
     colors = ["#5C8A1E", "#0A7EA4", "#BE3241"]
     plt.rcParams.update({"font.size": 9, "figure.dpi": 200})
 
-    fig, ax = plt.subplots(figsize=(4.2, 4.2))
+    # 这张 ROC 画的是表观概率（模型在自己的训练数据上预测），必然乐观，
+    # 只作诊断。稿件用的 Fig 4 由 scripts/build_figure4.py 从交叉验证与
+    # 时间验证的概率作图。文件名与标题都写明，免得被顺手贴进稿件。
+    fig, ax = plt.subplots(figsize=(4.2, 4.4))
     for k, label in enumerate(FIG_LABELS):
         fpr, tpr, _ = roc_curve((y == k).astype(int), proba[:, k])
         auc = one_vs_rest_auc(y, proba)[k]
@@ -235,8 +265,11 @@ def make_figures(y, proba, outdir):
                 label=f"{label} (AUC {auc:.3f})")
     ax.plot([0, 1], [0, 1], "k--", lw=0.8)
     ax.set_xlabel("1 − Specificity"); ax.set_ylabel("Sensitivity")
-    ax.set_title("One-vs-rest ROC"); ax.legend(frameon=False, loc="lower right")
-    fig.tight_layout(); fig.savefig(f"{outdir}/roc.png"); plt.close(fig)
+    ax.set_title("APPARENT (in-sample) — diagnostic only\nnot for publication; see Fig 4",
+                 fontsize=8, color="#BE3241")
+    ax.legend(frameon=False, loc="lower right")
+    fig.tight_layout()
+    fig.savefig(f"{outdir}/roc_apparent_DIAGNOSTIC.png"); plt.close(fig)
 
     fig, axes = plt.subplots(1, 3, figsize=(9.6, 3.4))
     for k, (ax, label) in enumerate(zip(axes, FIG_LABELS)):
@@ -405,6 +438,13 @@ def main():
         a(f"  {LABELS[k]:<4} 校准斜率 {slope:.3f}　截距 {intercept:+.3f}")
     a("")
 
+    save_predictions([("apparent", y, mean_proba),
+                      ("cv", y, cv_proba),
+                      ("temporal", yv, val_proba)],
+                     "outputs/predictions.csv")
+    a("  逐例预测概率已写入 outputs/predictions.csv（set 列区分三套）。")
+    a("")
+
     a("-" * 78)
     a("七、系数（Rubin 规则合并）")
     a("-" * 78)
@@ -433,7 +473,9 @@ def main():
     a("")
 
     make_figures(y, mean_proba, "outputs/figures")
-    a("图已输出：outputs/figures/{roc,calibration,decision_curve}.png")
+    a("诊断图已输出：outputs/figures/"
+      "{roc_apparent_DIAGNOSTIC,calibration,decision_curve}.png")
+    a("稿件 Fig 4 由 scripts/build_figure4.py 生成，用的是交叉验证与时间验证的概率。")
     a("=" * 78)
 
     report = "\n".join(L)

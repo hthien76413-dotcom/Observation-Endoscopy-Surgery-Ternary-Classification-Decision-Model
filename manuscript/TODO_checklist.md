@@ -21,9 +21,9 @@
 - [ ] 调阅这两例病历，说明再入院时的异物位置与手术所见——surgery. Review of both records showed an object retained for weeks with a clear indication for intervention, and in both the index discharge followed a family decision rather than a clinical judgement that observation was appropriate. In one, a pebble measuring 19 x 11 mm had lodged at the ileocaecal region for 11 days with rectal bleeding, and was removed at laparotomy after laparoscopy and colonoscopy failed to retrieve it. In the other, two magnetic objects had been retained for a month and computed tomography showed them apposed across the gastric wall; the child returned with a gastrocolic fistula and gastric perforation requiring repair.
 Obstruction, peritonitis or sepsis appeared among the discharge diagnoses of ten observation admissions, but in every instance the diagnosis was coded as present on admission rather than arising during the admission, and several were unrelated to the ingested object (appendicitis with abscess, faecal impaction, colitis). No new-onset complication was recorded in the observation group.
 This cohort contains only admissions for foreign body ingestion at this institution, so the readmission analysis cannot detect children who presented elsewhere, were admitted under a different diagnosis, or were managed in outpatient follow-up. The figures above should be read as institution-level foreign-body readmission, not as an absence of delayed intervention.
-【TODO: 全部效能结果。当前预试验值（5 折交叉验证、中位数填补、未做重标注）为：多分类 Logistic 宏平均 AUC 0.788（观察 0.725、内镜 0.735、手术 0.904）；随机森林宏平均 0.796；时间验证手术 AUC 0.945、宏平均 0.773。这些数字仅供占位，正式分析后整段重写
-- [ ] 校准结果——逐类校准斜率与截距、校准曲线（Fig 4）
-- [ ] 决策曲线分析结果——各类别在临床相关阈值区间的净获益（Fig 5）
+【TODO: 全部效能结果。当前预试验值（5 折交叉验证、中位数填补、未做重标注）为：多分类 Logistic 宏平均 AUC 0.788（观察 0.725、内镜 0.735、手术 0.904）；随机森林宏平均 0.796；时间验证手术 AUC 0.945、宏平均 0.773。这些数字仅供占位，正式分析后整段重写。改写时须引 Fig 4，并以折内交叉验证值为内部效能的主报告值——表观 0.826 与 Bootstrap 校正 0.807 均偏乐观，不可单报
+- [ ] 校准结果——逐类校准斜率与截距、校准曲线（Fig 5A）
+- [ ] 决策曲线分析结果——各类别在临床相关阈值区间的净获益（Fig 5B）
 - [ ] 依正式模型改写
 - [ ] 依正式结果填表并改写
 - [ ] 首段依正式结果改写
