@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.DS_Store
+
+# 单个患儿的自由文本病历集中在一处，只在本地查阅
+outputs/case_review.txt
