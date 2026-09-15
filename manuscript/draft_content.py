@@ -220,6 +220,13 @@ BODY = [
  "surgery in 135 (10.9%). Median length of stay was 2 days overall and 9 days in the "
  "surgical group. Baseline characteristics by management group are shown in Table 1.",
 
+ "The mix of management delivered shifted over the decade (Fig 2). Observation rose "
+ "from 43.8% of admissions in 2016 to 59.8% in the first half of 2026, while endoscopic "
+ "retrieval fell from 47.9% to 31.5%. Surgery remained a small minority throughout "
+ "except in 2020, when it accounted for 32.0% of 50 admissions. "
+ "【TODO: 2020 年的解释——需核对该年是否因疫情期间就诊延迟、仅重症就医而改变了"
+ "住院人群构成；n=50 是全期最小，比例波动本身也大，勿过度解读】",
+
  "Perforation was recorded in 78 admissions (6.3%), obstruction in 40 (3.2%) and "
  "peritonitis in 33 (2.7%). Of the 78 perforations, 76 were managed surgically and two "
  "endoscopically; none occurred during an admission managed by observation.",
@@ -372,8 +379,8 @@ TABLES = [
 
 FIGURES = [
  "Fig 1. Study flow diagram (TRIPOD/STROBE format). (已生成：outputs/figures/fig1_flow.pdf，矢量)",
- "Fig 2. 【TODO: 见方案 §七「重复图表风险」——若磁性异物论文已用过同类趋势图，"
- "本文改画三种治疗方式的逐年构成比，或舍弃】",
+ "Fig 2. Management delivered by year of admission, as a proportion of admissions. "
+ "(已生成：outputs/figures/fig2_trend.pdf，矢量)",
  "Fig 3. Sankey diagram: object type to location to management to outcome. 【TODO】",
  "Fig 4. Receiver operating characteristic curves, one-versus-rest, development and "
  "temporal validation. 【TODO】",

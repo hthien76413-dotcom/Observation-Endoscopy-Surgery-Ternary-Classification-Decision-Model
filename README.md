@@ -134,3 +134,13 @@ python3 scripts/build_figure1.py
 
 输出 `outputs/figures/fig1_flow.{pdf,png}`。所有数字从 `outputs/cohort.csv`
 实时读取，不硬编码——队列定义改动后重跑即同步，不会出现图与正文对不上。
+
+## Fig 2 逐年构成比
+
+```bash
+python3 scripts/build_figure2.py
+```
+
+三种治疗方式的逐年构成比（100% 堆积柱）。手术置于底层——只有最底层基线固定、
+厚度可直接读出，而手术占比是本文最关心也变化最剧烈的量（6.4%–32.0%）。
+落点在治疗决策而非异物流行病学，与磁性异物论文无重叠。

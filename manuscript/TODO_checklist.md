@@ -17,6 +17,7 @@
 - [ ] 说明是 LASSO 还是 ridge，以及惩罚参数如何选择
 - [ ] 分析软件与版本
 - [ ] 批件号与批准日期
+- [ ] 2020 年的解释——需核对该年是否因疫情期间就诊延迟、仅重症就医而改变了住院人群构成；n=50 是全期最小，比例波动本身也大，勿过度解读
 - [ ] 调阅这两例病历，说明再入院时的异物位置与手术所见——surgery. Review of both records showed an object retained for weeks with a clear indication for intervention, and in both the index discharge followed a family decision rather than a clinical judgement that observation was appropriate. In one, a pebble measuring 19 x 11 mm had lodged at the ileocaecal region for 11 days with rectal bleeding, and was removed at laparotomy after laparoscopy and colonoscopy failed to retrieve it. In the other, two magnetic objects had been retained for a month and computed tomography showed them apposed across the gastric wall; the child returned with a gastrocolic fistula and gastric perforation requiring repair.
 Obstruction, peritonitis or sepsis appeared among the discharge diagnoses of ten observation admissions, but in every instance the diagnosis was coded as present on admission rather than arising during the admission, and several were unrelated to the ingested object (appendicitis with abscess, faecal impaction, colitis). No new-onset complication was recorded in the observation group.
 This cohort contains only admissions for foreign body ingestion at this institution, so the readmission analysis cannot detect children who presented elsewhere, were admitted under a different diagnosis, or were managed in outpatient follow-up. The figures above should be read as institution-level foreign-body readmission, not as an absence of delayed intervention.
@@ -37,7 +38,6 @@ This cohort contains only admissions for foreign body ingestion at this institut
 - [ ] 按 CRediT 分类逐人填写
 - [ ] 与磁性异物论文的措辞保持一致
 - [ ] 仓库地址
-- [ ] 见方案 §七「重复图表风险」——若磁性异物论文已用过同类趋势图，本文改画三种治疗方式的逐年构成比，或舍弃
 
 ## 二、需要补入的真实文献
 

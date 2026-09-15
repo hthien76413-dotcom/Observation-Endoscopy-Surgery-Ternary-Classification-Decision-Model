@@ -91,6 +91,8 @@ This cohort has been partly described in a separate report concerning the epidem
 
 Between July 2016 and June 2026, 1238 admissions in 1228 children met the inclusion criteria. Median age was 3.2 years (IQR 1.8–5.8) and 《62.9%》 were boys. Management was observation in 583 admissions (47.1%), endoscopic retrieval in 520 (42.0%), and surgery in 135 (10.9%). Median length of stay was 2 days overall and 9 days in the surgical group. Baseline characteristics by management group are shown in Table 1.
 
+The mix of management delivered shifted over the decade (Fig 2). Observation rose from 43.8% of admissions in 2016 to 59.8% in the first half of 2026, while endoscopic retrieval fell from 47.9% to 31.5%. Surgery remained a small minority throughout except in 2020, when it accounted for 32.0% of 50 admissions. 【TODO: 2020 年的解释——需核对该年是否因疫情期间就诊延迟、仅重症就医而改变了住院人群构成；n=50 是全期最小，比例波动本身也大，勿过度解读】
+
 Perforation was recorded in 78 admissions (6.3%), obstruction in 40 (3.2%) and peritonitis in 33 (2.7%). Of the 78 perforations, 76 were managed surgically and two endoscopically; none occurred during an admission managed by observation.
 
 Because an outcome defined by delivered management could conceal deferred rather than avoided intervention, we examined readmissions. Among 577 observation admissions with a recorded discharge date, two children (0.35%) were readmitted within 30 days and underwent surgery, at 2 and 5 days after discharge; readmission within 30 days occurred in 5 of 520 admissions (0.96%) after endoscopy and 2 of 135 (1.48%) after surgery. 【TODO: 调阅这两例病历，说明再入院时的异物位置与手术所见——surgery. Review of both records showed an object retained for weeks with a clear indication for intervention, and in both the index discharge followed a family decision rather than a clinical judgement that observation was appropriate. In one, a pebble measuring 19 x 11 mm had lodged at the ileocaecal region for 11 days with rectal bleeding, and was removed at laparotomy after laparoscopy and colonoscopy failed to retrieve it. In the other, two magnetic objects had been retained for a month and computed tomography showed them apposed across the gastric wall; the child returned with a gastrocolic fistula and gastric perforation requiring repair.
@@ -157,7 +159,7 @@ This study has important limitations. First, and most fundamentally, the outcome
 ## Figures
 
 - Fig 1. Study flow diagram (TRIPOD/STROBE format). (已生成：outputs/figures/fig1_flow.pdf，矢量)
-- Fig 2. 【TODO: 见方案 §七「重复图表风险」——若磁性异物论文已用过同类趋势图，本文改画三种治疗方式的逐年构成比，或舍弃】
+- Fig 2. Management delivered by year of admission, as a proportion of admissions. (已生成：outputs/figures/fig2_trend.pdf，矢量)
 - Fig 3. Sankey diagram: object type to location to management to outcome. 【TODO】
 - Fig 4. Receiver operating characteristic curves, one-versus-rest, development and temporal validation. 【TODO】
 - Fig 5. Class-specific calibration curves and decision curve analysis. 【TODO】
