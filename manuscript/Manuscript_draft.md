@@ -3,7 +3,7 @@
 *Running head: A three-class decision model for paediatric GI foreign bodies*
 
 > **这是初稿，不可直接投稿。**
-> 正文含 28 处 `【TODO】` 占位、11 处 `[REF-n]` 待补文献。
+> 正文含 30 处 `【TODO】` 占位、11 处 `[REF-n]` 待补文献。
 > `《数字》` 标记的值来自预试验（5 折交叉验证、中位数填补、未做影像重标注），
 > 正式分析后必须更新。清单见 `TODO_checklist.md`。
 
@@ -73,6 +73,8 @@ With 32 predictor parameters, none of the three comparisons is fully supported. 
 
 This shortfall is a property of the clinical problem rather than an oversight, and it runs in the same direction as our central finding. The requirement rises as the outcome becomes harder to predict, and the observation–endoscopy distinction is precisely the one the data separate least well. It is why the model is penalised, why we report fold-internal cross-validation rather than apparent performance, and why we do not propose the observation–endoscopy probabilities as a decision rule. We state it here rather than in the limitations alone, because it bears on how the model should be read throughout.
 
+【TODO: 学习曲线敏感性分析，依 outputs/learning_curve.txt 改写为正式段落。要点（措辞须谨慎，不可越过观测范围外推）：固定测试集（n=248）+ 训练池分层子抽样（n=99→990）显示观察/内镜的判别力尾段斜率仅为头段的 0.10–0.12（手术类作对照为 0.17，走平更早符合预期），即在当前训练池规模内已大体走平而非仍在陡峭爬升。这一观察与「样本不足」这一替代解释方向相反，为「观察/内镜边界不清是决策本身的性质」提供了一条独立于上文 Riley 核算的旁证。但**必须与上一段的样本量短缺并置陈述，不可单独使用去掩盖它**：曲线只覆盖到 n=990，走平也可能只是「当前规模内爬得慢」，不等同于「给再多同类数据也不会再涨」——没有做任何超出观测范围的外推，写作时须保留「in the available sample」一类限定语】
+
 ### 2.6. Statistical analysis
 
 The primary model was a penalised multinomial logistic regression with observation as the reference class. The penalty type (L1 or L2) and its strength were selected together by five-fold cross-validation over a grid, minimising multiclass log-loss; an L1 (lasso) penalty was selected, at the inverse-strength value C = 0.1. Selection was performed once on a median-filled copy of the data and the chosen penalty then held fixed across the imputed datasets; this keeps the computation tractable but means the optimism correction is slightly anticonservative, as noted below. Random forest and gradient boosting models were fitted for comparison, to establish whether a more flexible algorithm offered material benefit over an interpretable one.
@@ -129,7 +131,7 @@ This cohort contains only admissions for foreign body ingestion at this institut
 
 【TODO: 首段依正式结果改写】 In a decade of consecutive admissions for paediatric gastrointestinal foreign body ingestion, management fell into three groups of markedly unequal size and predictability. The need for surgery was identified with high discrimination. The boundary between observation and endoscopic retrieval was considerably less separable.
 
-We do not regard that asymmetry as a deficiency of the model. Whether a child requires an operation is determined by objective pathology — perforation, obstruction, or bowel trapped between magnets — and such states leave clear traces in the history, the examination and the film. Whether a blunt object sitting in the stomach of an asymptomatic child is retrieved endoscopically or watched is a different kind of question. It is not fully determined by the child's physiology, and it is influenced by institutional habit, theatre availability, and the distress of the family. A model trained on what clinicians did will reproduce that variability, and its inability to separate the two groups cleanly is a measurement of the variability rather than a failure to detect a signal. On this reading, the region where the model discriminates least is precisely the region where consensus and decision support are most needed.
+We do not regard that asymmetry as a deficiency of the model. Whether a child requires an operation is determined by objective pathology — perforation, obstruction, or bowel trapped between magnets — and such states leave clear traces in the history, the examination and the film. Whether a blunt object sitting in the stomach of an asymptomatic child is retrieved endoscopically or watched is a different kind of question. It is not fully determined by the child's physiology, and it is influenced by institutional habit, theatre availability, and the distress of the family. A model trained on what clinicians did will reproduce that variability, and its inability to separate the two groups cleanly is a measurement of the variability rather than a failure to detect a signal. On this reading, the region where the model discriminates least is precisely the region where consensus and decision support are most needed. 【TODO: 补一句引学习曲线（§2.5 末段 / outputs/learning_curve.txt）——观察/内镜的判别力在现有训练池规模内已大体走平（尾/头斜率比 0.10–0.12），为此处论点提供旁证；但同段须同时提醒读者这与样本量核算（§2.5，该对比较仍需 2095 例）并非互相矛盾而是同一枚硬币的两面，不要写成学习曲线已经「证明」了这一论点】
 
 Magnetic objects were the leading driver of operative management in this cohort. Their epidemiology over the study period, including the rise in incidence and the associated perforation burden, is reported separately [REF-10]; here they are relevant as the single object type most strongly associated with surgery. 【TODO: 重标注完成后，补充磁体数目与「单枚磁体合并其他金属」的分析——后者风险等同多枚磁体，易被漏判】
 

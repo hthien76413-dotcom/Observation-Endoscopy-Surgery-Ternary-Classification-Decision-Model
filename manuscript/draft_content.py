@@ -202,7 +202,18 @@ BODY = [
  "why we report fold-internal cross-validation rather than apparent performance, and "
  "why we do not propose the observation\u2013endoscopy probabilities as a decision "
  "rule. We state it here rather than in the limitations alone, because it bears on "
- "how the model should be read throughout."]),
+ "how the model should be read throughout.",
+
+ "\u3010TODO: \u5b66\u4e60\u66f2\u7ebf\u654f\u611f\u6027\u5206\u6790\uff0c\u4f9d outputs/learning_curve.txt \u6539\u5199\u4e3a\u6b63\u5f0f\u6bb5\u843d\u3002"
+ "\u8981\u70b9\uff08\u63aa\u8f9e\u987b\u8c28\u614e\uff0c\u4e0d\u53ef\u8d8a\u8fc7\u89c2\u6d4b\u8303\u56f4\u5916\u63a8\uff09\uff1a\u56fa\u5b9a\u6d4b\u8bd5\u96c6\uff08n=248\uff09+ \u8bad\u7ec3\u6c60\u5206\u5c42"
+ "\u5b50\u62bd\u6837\uff08n=99\u2192990\uff09\u663e\u793a\u89c2\u5bdf/\u5185\u955c\u7684\u5224\u522b\u529b\u5c3e\u6bb5\u659c\u7387\u4ec5\u4e3a\u5934\u6bb5\u7684 0.10\u20130.12"
+ "\uff08\u624b\u672f\u7c7b\u4f5c\u5bf9\u7167\u4e3a 0.17\uff0c\u8d70\u5e73\u66f4\u65e9\u7b26\u5408\u9884\u671f\uff09\uff0c\u5373\u5728\u5f53\u524d\u8bad\u7ec3\u6c60\u89c4\u6a21\u5185\u5df2\u5927\u4f53"
+ "\u8d70\u5e73\u800c\u975e\u4ecd\u5728\u9661\u5ced\u722c\u5347\u3002\u8fd9\u4e00\u89c2\u5bdf\u4e0e\u300c\u6837\u672c\u4e0d\u8db3\u300d\u8fd9\u4e00\u66ff\u4ee3\u89e3\u91ca\u65b9\u5411\u76f8\u53cd\uff0c\u4e3a"
+ "\u300c\u89c2\u5bdf/\u5185\u955c\u8fb9\u754c\u4e0d\u6e05\u662f\u51b3\u7b56\u672c\u8eab\u7684\u6027\u8d28\u300d\u63d0\u4f9b\u4e86\u4e00\u6761\u72ec\u7acb\u4e8e\u4e0a\u6587 Riley \u6838\u7b97\u7684"
+ "\u65c1\u8bc1\u3002\u4f46**\u5fc5\u987b\u4e0e\u4e0a\u4e00\u6bb5\u7684\u6837\u672c\u91cf\u77ed\u7f3a\u5e76\u7f6e\u9648\u8ff0\uff0c\u4e0d\u53ef\u5355\u72ec\u4f7f\u7528\u53bb\u63a9\u76d6\u5b83**\uff1a\u66f2\u7ebf"
+ "\u53ea\u8986\u76d6\u5230 n=990\uff0c\u8d70\u5e73\u4e5f\u53ef\u80fd\u53ea\u662f\u300c\u5f53\u524d\u89c4\u6a21\u5185\u722c\u5f97\u6162\u300d\uff0c\u4e0d\u7b49\u540c\u4e8e\u300c\u7ed9\u518d\u591a"
+ "\u540c\u7c7b\u6570\u636e\u4e5f\u4e0d\u4f1a\u518d\u6da8\u300d\u2014\u2014\u6ca1\u6709\u505a\u4efb\u4f55\u8d85\u51fa\u89c2\u6d4b\u8303\u56f4\u7684\u5916\u63a8\uff0c\u5199\u4f5c\u65f6\u987b\u4fdd\u7559"
+ "\u300cin the available sample\u300d\u4e00\u7c7b\u9650\u5b9a\u8bed\u3011"]),
 
 ("2.6. Statistical analysis", [
  "The primary model was a penalised multinomial logistic regression with observation "
@@ -359,7 +370,11 @@ BODY = [
  "trained on what clinicians did will reproduce that variability, and its inability to "
  "separate the two groups cleanly is a measurement of the variability rather than a "
  "failure to detect a signal. On this reading, the region where the model discriminates "
- "least is precisely the region where consensus and decision support are most needed.",
+ "least is precisely the region where consensus and decision support are most needed. "
+ "【TODO: 补一句引学习曲线（§2.5 末段 / outputs/learning_curve.txt）——观察/内镜的"
+ "判别力在现有训练池规模内已大体走平（尾/头斜率比 0.10–0.12），为此处论点提供"
+ "旁证；但同段须同时提醒读者这与样本量核算（§2.5，该对比较仍需 2095 例）并非"
+ "互相矛盾而是同一枚硬币的两面，不要写成学习曲线已经「证明」了这一论点】",
 
  "Magnetic objects were the leading driver of operative management in this cohort. "
  "Their epidemiology over the study period, including the rise in incidence and the "
